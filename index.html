@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GSUA Frontline Archive</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="viewer">
+  <a class="skip-link" href="#main">跳转到主要内容</a>
+
+  <header class="ua-header">
+    <div class="globe-mark" aria-hidden="true">GS</div>
+    <nav class="global-nav" aria-label="主导航">
+      <a class="global-link active" href="index.html">前线图档案</a>
+      <a class="global-link" href="#directionArea">按方向</a>
+      <a class="global-link" href="#dateArea">按日期</a>
+      <a class="global-link" href="admin.html">管理后台</a>
+    </nav>
+  </header>
+
+  <main id="main" class="shell">
+    <section class="booking-box" aria-label="筛选前线图">
+      <div class="tabs-row">
+        <button class="box-tab active" data-mode="direction">Direction</button>
+        <button class="box-tab" data-mode="date">Date</button>
+        <button class="box-tab" data-mode="latest">Latest</button>
+      </div>
+
+      <div class="search-panel">
+        <div class="search-grid">
+          <label>
+            方向
+            <select id="directionFilter"></select>
+          </label>
+          <label>
+            日期
+            <select id="dateFilter"></select>
+          </label>
+          <div class="search-actions">
+            <button class="primary-pill" id="applyFilterBtn">Search</button>
+          </div>
+        </div>
+        <p class="help-link"><a href="admin.html">上传新的每日图文 ›</a></p>
+      </div>
+    </section>
+
+    <section class="status-line">
+      <strong id="summaryCount">0 条记录</strong>
+      <span>选择方向或日期后，可在每日图像之间切换；报告中的地名会变成可点击链接。</span>
+    </section>
+
+    <section id="directionArea" class="content-section">
+      <div class="section-head">
+        <h1 id="directionTitle">综合展示</h1>
+        <div class="button-strip">
+          <button class="outline-btn small" id="prevImageBtn">‹ 上一张</button>
+          <button class="outline-btn small" id="nextImageBtn">下一张 ›</button>
+        </div>
+      </div>
+
+      <article class="viewer-panel">
+        <div class="image-frame">
+          <img id="mainImage" alt="前线图预览" />
+          <div id="emptyViewer" class="empty-state">暂无图片。请进入管理后台上传。</div>
+        </div>
+        <aside class="report-panel">
+          <div class="panel-title">Report</div>
+          <h2 id="viewerMeta">暂无记录</h2>
+          <div id="viewerReport" class="report-text"></div>
+        </aside>
+      </article>
+      <div id="timelineStrip" class="timeline-strip"></div>
+    </section>
+
+    <section id="dateArea" class="content-section">
+      <div class="section-head">
+        <h1 id="dateTitle">最新方向</h1>
+      </div>
+      <div id="dateGrid" class="link-grid"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
