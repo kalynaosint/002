@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GSUA 管理后台</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+  --blue-900:#001A4A; --blue-800:#002D72; --blue-700:#003DA5;
+  --blue-600:#0050CC; --blue-500:#0057B8;
+  --bg-page:#F2F4F7; --bg-white:#FFFFFF; --bg-panel:#F8F9FB;
+  --border-light:#D0D5DD; --border-mid:#AABBCC; --border-dark:#8899AA;
+  --text-primary:#111827; --text-secondary:#4B5563; --text-muted:#6B7280;
+  --green:#16A34A; --red:#DC2626; --orange:#D97706;
+  --focus-ring:0 0 0 3px rgba(0,61,165,0.45);
+  --radius:4px;
+}
+
+body { font-family:Arial,Helvetica,"Segoe UI",sans-serif; font-size:14px; color:var(--text-primary); background:var(--bg-page); line-height:1.55; min-height:100vh; }
+
+a { color:#0000CC; text-decoration:underline; }
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible { outline:none; box-shadow:var(--focus-ring); }
+
+/* ── HEADER ── */
+#site-header { background:var(--blue-700); color:#fff; border-bottom:3px solid var(--blue-900); }
+.header-inner { max-width:1440px; margin:0 auto; padding:0 20px; height:52px; display:flex; align-items:center; justify-content:space-between; }
+.brand { display:flex; align-items:center; gap:10px; }
+.brand-icon { width:32px;height:32px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:18px; }
+.brand h1 { font-size:17px;font-weight:bold;color:#fff;letter-spacing:0.3px; }
+.brand .tag { background:rgba(255,165,0,0.25);border:1px solid rgba(255,165,0,0.5);color:#FFD080;font-size:11px;padding:2px 8px;border-radius:3px;font-weight:bold;letter-spacing:0.5px; }
+.header-nav a { color:rgba(255,255,255,0.85);font-size:13px;text-decoration:none;border:1px solid rgba(255,255,255,0.3);border-radius:var(--radius);padding:5px 12px; }
+.header-nav a:hover { background:rgba(255,255,255,0.15); }
+
+/* ── SECTION TABS ── */
+#admin-tabs { background:var(--blue-900); border-bottom:1px solid rgba(0,0,0,0.3); display:flex; padding:0 20px; }
+.atab { background:none;color:rgba(255,255,255,0.6);border:none;border-bottom:3px solid transparent;padding:11px 22px 8px;font-size:13px;font-family:inherit;cursor:pointer;white-space:nowrap; }
+.atab:hover { background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.9); }
+.atab.active { background:var(--bg-white);color:var(--blue-700);font-weight:bold;border-bottom:3px solid var(--bg-white);border-radius:3px 3px 0 0; }
+
+/* ── MAIN LAYOUT ── */
+#admin-root { max-width:1440px; margin:0 auto; padding:16px 20px 40px; }
+.admin-panel { display:none; }
+.admin-panel.active { display:block; }
+
+/* ── CONFIG BAR ── */
+#config-bar {
+  background:var(--bg-white);
+  border:1px solid var(--border-light);
+  border-radius:var(--radius);
+  margin-bottom:16px;
+  overflow:hidden;
+}
+.cfg-toggle {
+  width:100%;background:#EEF2FA;border:none;border-bottom:1px solid var(--border-light);
+  padding:10px 16px;text-align:left;font-family:inherit;font-size:13px;font-weight:bold;
+  color:var(--blue-700);cursor:pointer;display:flex;align-items:center;gap:8px;
+}
+.cfg-toggle:hover { background:#E0E8F5; }
+.cfg-body { padding:16px; display:none; }
+.cfg-body.open { display:block; }
+.cfg-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; margin-bottom:12px; }
+.cfg-field label { display:block;font-size:12px;font-weight:bold;color:var(--text-secondary);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.4px; }
+.cfg-field input { width:100%;padding:7px 10px;border:1px solid var(--border-mid);border-radius:var(--radius);font-size:13px;font-family:inherit; }
+.cfg-field input:focus-visible { box-shadow:var(--focus-ring); }
+.cfg-actions { display:flex;gap:10px;align-items:center; }
+#cfg-status { font-size:13px; }
+
+/* ── BUTTONS ── */
+.btn { display:inline-flex;align-items:center;gap:6px;padding:7px 16px;font-family:inherit;font-size:13px;font-weight:bold;border-radius:var(--radius);cursor:pointer;border:1px solid transparent;white-space:nowrap;line-height:1.4; }
+.btn-primary { background:var(--blue-700);color:#fff;border-color:var(--blue-900); }
+.btn-primary:hover { background:var(--blue-800); }
+.btn-primary:disabled { background:var(--border-dark);border-color:var(--border-dark);cursor:not-allowed;opacity:0.6; }
+.btn-secondary { background:#fff;color:var(--blue-700);border-color:var(--border-mid); }
+.btn-secondary:hover { background:#EEF2FA; }
+.btn-danger { background:var(--red);color:#fff;border-color:#991B1B; }
+.btn-danger:hover { background:#991B1B; }
+.btn-sm { padding:4px 10px;font-size:12px; }
+button:focus-visible { outline:none;box-shadow:var(--focus-ring); }
+
+/* ── CARDS ── */
+.card { background:var(--bg-white);border:1px solid var(--border-light);border-radius:var(--radius);overflow:hidden;margin-bottom:16px; }
+.card-hd { background:#EEF2FA;border-bottom:1px solid var(--border-light);padding:10px 16px;font-size:13px;font-weight:bold;color:var(--blue-700);letter-spacing:0.3px;display:flex;align-items:center;gap:8px;justify-content:space-between; }
+.card-body { padding:16px; }
+
+/* ── FORMS ── */
+.form-row { margin-bottom:14px; }
+.form-label { display:block;font-size:12px;font-weight:bold;color:var(--text-secondary);margin-bottom:5px;text-transform:uppercase;letter-spacing:0.4px; }
+.form-label .req { color:var(--red);margin-left:2px; }
+.form-input, .form-select, .form-textarea {
+  width:100%;padding:8px 10px;border:1px solid var(--border-mid);border-radius:var(--radius);
+  font-size:14px;font-family:inherit;background:var(--bg-white);color:var(--text-primary);
+}
+.form-input:focus-visible,.form-select:focus-visible,.form-textarea:focus-visible { box-shadow:var(--focus-ring); }
+.form-textarea { resize:vertical;min-height:160px;line-height:1.6; }
+.form-hint { font-size:12px;color:var(--text-muted);margin-top:4px; }
+.form-row-2 { display:grid;grid-template-columns:1fr 1fr;gap:14px; }
+@media(max-width:600px){.form-row-2{grid-template-columns:1fr;}}
+
+/* ── PASTE ZONE ── */
+#paste-zone {
+  border:2px dashed var(--border-mid);border-radius:var(--radius);
+  background:#FAFBFD;min-height:200px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;text-align:center;padding:24px;transition:none;position:relative;
+}
+#paste-zone:hover,.paste-zone-active { border-color:var(--blue-600);background:#EEF2FA; }
+#paste-zone.has-image { padding:0;overflow:hidden; }
+#paste-zone img { max-width:100%;max-height:300px;object-fit:contain;display:block;margin:auto; }
+.paste-hint { font-size:15px;color:var(--text-muted);margin-bottom:8px; }
+.paste-hint strong { color:var(--blue-700);display:block;font-size:17px;margin-bottom:6px; }
+#paste-zone input[type=file] { position:absolute;opacity:0;width:100%;height:100%;cursor:pointer;top:0;left:0; }
+
+/* ── UPLOAD LAYOUT ── */
+.upload-layout { display:grid;grid-template-columns:1fr 340px;gap:16px; }
+@media(max-width:900px){.upload-layout{grid-template-columns:1fr;}}
+
+/* ── TOAST ── */
+#toast-container { position:fixed;bottom:24px;right:24px;z-index:999;display:flex;flex-direction:column;gap:8px; }
+.toast {
+  background:var(--blue-800);color:#fff;padding:10px 18px;border-radius:var(--radius);
+  font-size:13px;border-left:4px solid var(--blue-600);max-width:360px;
+  animation:fadeIn 0.2s ease;box-shadow:0 4px 12px rgba(0,0,0,0.25);
+}
+.toast.success { background:#14532D;border-left-color:var(--green); }
+.toast.error   { background:#7F1D1D;border-left-color:var(--red); }
+.toast.warning { background:#78350F;border-left-color:var(--orange); }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none} }
+
+/* ── DIRECTION TABLE ── */
+.dir-table { width:100%;border-collapse:collapse; }
+.dir-table th { background:#EEF2FA;border:1px solid var(--border-light);padding:8px 12px;text-align:left;font-size:12px;font-weight:bold;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.4px; }
+.dir-table td { border:1px solid var(--border-light);padding:8px 12px;font-size:13px;vertical-align:middle; }
+.dir-table tr:hover td { background:#F5F7FB; }
+.dir-badge { display:inline-flex;align-items:center;gap:4px;background:#EEF2FA;border:1px solid var(--border-light);border-radius:3px;padding:2px 8px;font-size:12px;color:var(--text-secondary);margin:2px; }
+.dir-badge .rm { background:none;border:none;cursor:pointer;color:var(--red);font-size:13px;font-weight:bold;padding:0 2px;line-height:1; }
+
+/* ── REPORT PREVIEW ── */
+#report-preview { background:#FAFBFD;border:1px solid var(--border-light);border-radius:var(--radius);padding:14px;font-size:14px;line-height:1.75;min-height:80px;word-break:break-word; }
+.place-tag { color:var(--link-color);font-weight:bold;background:#FFF8DC;padding:0 3px;border-radius:2px; }
+.detected-tags { display:flex;flex-wrap:wrap;gap:6px;margin-top:8px; }
+.detected-tag { background:#EEF2FA;border:1px solid var(--border-mid);border-radius:3px;padding:3px 10px;font-size:12px;color:var(--blue-700); }
+
+/* ── RECENT LIST ── */
+.recent-item { display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border-light); }
+.recent-item:last-child { border-bottom:none; }
+.recent-thumb { width:60px;height:40px;object-fit:cover;border-radius:2px;border:1px solid var(--border-light);flex-shrink:0;background:#ddd; }
+.recent-info { flex:1;min-width:0; }
+.recent-info .ri-dir { font-weight:bold;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+.recent-info .ri-date { font-size:12px;color:var(--text-muted); }
+
+/* ── PROGRESS ── */
+.progress-bar { height:8px;background:#E5E7EB;border-radius:4px;overflow:hidden;margin:8px 0; }
+.progress-fill { height:100%;background:var(--blue-700);border-radius:4px;transition:width 0.2s; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:7px;height:7px}::-webkit-scrollbar-track{background:#f0f0f0}::-webkit-scrollbar-thumb{background:#aaa;border-radius:4px}::-webkit-scrollbar-thumb:hover{background:#777}
+</style>
+</head>
+<body>
+
+<header id="site-header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-icon">⚙</div>
+      <h1>GSUA 管理后台</h1>
+      <span class="tag">ADMIN</span>
+    </div>
+    <nav class="header-nav">
+      <a href="index.html">← 返回主页</a>
+    </nav>
+  </div>
+</header>
+
+<div id="admin-tabs" role="tablist">
+  <button class="atab active" id="atab-upload" role="tab" aria-selected="true" onclick="switchTab('upload')">📤 上传图片</button>
+  <button class="atab" id="atab-report" role="tab" aria-selected="false" onclick="switchTab('report')">📝 编辑报告</button>
+  <button class="atab" id="atab-manage" role="tab" aria-selected="false" onclick="switchTab('manage')">🗂 方向管理</button>
+  <button class="atab" id="atab-settings" role="tab" aria-selected="false" onclick="switchTab('settings')">⚙ 系统设置</button>
+</div>
+
+<div id="admin-root">
+
+  <!-- ═══ GITHUB CONFIG BAR ═══ -->
+  <div id="config-bar">
+    <button class="cfg-toggle" id="cfg-toggle-btn" onclick="toggleConfig()" aria-expanded="false">
+      <span id="cfg-toggle-icon">▶</span>
+      GitHub 连接配置
+      <span id="cfg-status-inline" style="font-weight:normal;font-size:12px;color:var(--text-muted);margin-left:8px"></span>
+    </button>
+    <div class="cfg-body" id="cfg-body">
+      <div class="cfg-grid">
+        <div class="cfg-field">
+          <label for="cfg-owner">GitHub 用户名 / Org</label>
+          <input type="text" id="cfg-owner" placeholder="your-username" autocomplete="off">
+        </div>
+        <div class="cfg-field">
+          <label for="cfg-repo">仓库名称</label>
+          <input type="text" id="cfg-repo" placeholder="gsua-tracker" autocomplete="off">
+        </div>
+        <div class="cfg-field">
+          <label for="cfg-branch">分支</label>
+          <input type="text" id="cfg-branch" placeholder="main" autocomplete="off">
+        </div>
+        <div class="cfg-field">
+          <label for="cfg-token">Personal Access Token</label>
+          <input type="password" id="cfg-token" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off">
+        </div>
+      </div>
+      <div class="cfg-actions">
+        <button class="btn btn-primary" onclick="saveConfig()">💾 保存配置</button>
+        <button class="btn btn-secondary" onclick="testAndLoad()">🔄 测试连接 &amp; 加载数据</button>
+        <span id="cfg-status" style="font-size:13px"></span>
+      </div>
+      <p style="font-size:12px;color:var(--text-muted);margin-top:10px">
+        Token 需要 <strong>repo</strong> 权限。配置保存在浏览器本地，不会上传到任何地方。
+        <a href="https://github.com/settings/tokens/new?scopes=repo" target="_blank" rel="noopener">创建 Token →</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- ═══ UPLOAD TAB ═══ -->
+  <div id="panel-upload" class="admin-panel active">
+    <div class="upload-layout">
+
+      <!-- Left: paste + form -->
+      <div>
+        <div class="card">
+          <div class="card-hd">📤 上传前线图</div>
+          <div class="card-body">
+
+            <div class="form-row">
+              <label class="form-label">粘贴或拖入图片<span class="req">*</span></label>
+              <div id="paste-zone" tabindex="0" role="button" aria-label="点击或粘贴图片" title="点击选择文件，或 Ctrl+V 粘贴截图">
+                <input type="file" id="file-input" accept="image/*" aria-label="选择图片文件" onchange="handleFileInput(event)">
+                <div id="paste-hint">
+                  <div class="paste-hint">
+                    <strong>🖼 粘贴截图 / 拖入图片</strong>
+                    Ctrl+V 粘贴截图，或点击此处选择文件<br>
+                    <span style="font-size:12px;color:#999;margin-top:4px;display:block">支持 PNG、JPG、WEBP 等格式</span>
+                  </div>
+                </div>
+              </div>
+              <div id="paste-info" style="font-size:12px;color:var(--text-muted);margin-top:4px;display:none"></div>
+            </div>
+
+            <div class="form-row-2">
+              <div class="form-row" style="margin-bottom:0">
+                <label class="form-label" for="up-direction">前线方向<span class="req">*</span></label>
+                <select class="form-select" id="up-direction">
+                  <option value="">-- 请选择方向 --</option>
+                </select>
+              </div>
+              <div class="form-row" style="margin-bottom:0">
+                <label class="form-label" for="up-date">对应日期<span class="req">*</span></label>
+                <input type="date" class="form-input" id="up-date">
+              </div>
+            </div>
+
+            <div id="upload-progress" style="display:none;margin-top:12px">
+              <div style="font-size:13px;color:var(--blue-700);margin-bottom:4px" id="upload-progress-text">正在上传…</div>
+              <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+            </div>
+
+            <div style="margin-top:16px;display:flex;gap:10px;align-items:center">
+              <button class="btn btn-primary" id="upload-btn" onclick="doUpload()" disabled>📤 上传图片</button>
+              <button class="btn btn-secondary" onclick="clearPaste()">✕ 清除</button>
+              <span id="upload-status" style="font-size:13px"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: recent uploads -->
+      <div>
+        <div class="card">
+          <div class="card-hd">
+            <span>📋 最近上传记录</span>
+            <button class="btn btn-secondary btn-sm" onclick="refreshData()">🔄 刷新</button>
+          </div>
+          <div class="card-body" id="recent-list">
+            <p style="color:var(--text-muted);font-size:13px">请先连接 GitHub 并加载数据</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-hd">📊 数据统计</div>
+          <div class="card-body" id="data-stats">
+            <p style="color:var(--text-muted);font-size:13px">暂未加载</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══ REPORT TAB ═══ -->
+  <div id="panel-report" class="admin-panel">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+      <div>
+        <div class="card">
+          <div class="card-hd">📝 编辑战况报告</div>
+          <div class="card-body">
+            <div class="form-row">
+              <label class="form-label" for="rpt-date">报告日期<span class="req">*</span></label>
+              <input type="date" class="form-input" id="rpt-date" oninput="onReportDateChange()">
+            </div>
+            <div class="form-row">
+              <label class="form-label" for="rpt-text">报告内容<span class="req">*</span></label>
+              <textarea class="form-textarea" id="rpt-text" rows="12"
+                        placeholder="在此输入战况报告文字…&#10;&#10;提示：直接输入地名如「波克罗夫斯克」「哈尔科夫」等，在主页上将自动变为可点击链接。"
+                        oninput="onReportInput()"></textarea>
+              <div class="form-hint">报告中出现的地名将在主页自动高亮为可跳转链接</div>
+            </div>
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+              <button class="btn btn-primary" onclick="saveReport()">💾 保存报告</button>
+              <button class="btn btn-secondary" onclick="loadExistingReport()">📥 加载已有报告</button>
+              <span id="report-status" style="font-size:13px"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-hd">👁 预览效果</div>
+          <div class="card-body">
+            <div class="form-label" style="margin-bottom:8px">检测到的地名：</div>
+            <div class="detected-tags" id="detected-tags"><span style="font-size:12px;color:var(--text-muted)">尚无检测结果</span></div>
+            <div class="form-label" style="margin:14px 0 8px">报告预览：</div>
+            <div id="report-preview"><span style="color:var(--text-muted);font-size:13px">在左侧输入报告内容后显示预览</span></div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:0">
+          <div class="card-hd">📅 已有报告日期</div>
+          <div class="card-body" id="report-dates-list" style="max-height:200px;overflow-y:auto">
+            <p style="color:var(--text-muted);font-size:13px">请先加载数据</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ MANAGE TAB ═══ -->
+  <div id="panel-manage" class="admin-panel">
+    <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px">
+      <div>
+        <div class="card">
+          <div class="card-hd">
+            <span>🗂 前线方向列表</span>
+            <span id="dir-count" style="font-size:12px;font-weight:normal;color:var(--text-muted)"></span>
+          </div>
+          <div class="card-body" style="padding:0">
+            <table class="dir-table">
+              <thead>
+                <tr>
+                  <th style="width:40px">#</th>
+                  <th>名称</th>
+                  <th>ID</th>
+                  <th>别名（用于报告识别）</th>
+                  <th style="width:80px">操作</th>
+                </tr>
+              </thead>
+              <tbody id="dir-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <div class="card-hd">➕ 新增方向</div>
+          <div class="card-body">
+            <div class="form-row">
+              <label class="form-label" for="new-dir-name">方向名称<span class="req">*</span></label>
+              <input type="text" class="form-input" id="new-dir-name" placeholder="例：扎波罗热">
+            </div>
+            <div class="form-row">
+              <label class="form-label" for="new-dir-id">ID（英文，唯一）<span class="req">*</span></label>
+              <input type="text" class="form-input" id="new-dir-id" placeholder="例：zaporizhzhia">
+              <div class="form-hint">只能含字母、数字和连字符，自动生成可手动改</div>
+            </div>
+            <div class="form-row">
+              <label class="form-label" for="new-dir-aliases">别名（逗号分隔）</label>
+              <input type="text" class="form-input" id="new-dir-aliases" placeholder="例：扎波，Zaporizhzhia">
+              <div class="form-hint">报告中出现这些词时自动识别为该方向</div>
+            </div>
+            <button class="btn btn-primary" onclick="addDirection()">➕ 添加方向</button>
+            <p id="add-dir-status" style="font-size:13px;margin-top:8px"></p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-hd">⚠ 注意事项</div>
+          <div class="card-body">
+            <p style="font-size:13px;color:var(--text-secondary);line-height:1.7">
+              · 删除方向不会删除已上传的图片，但方向将从列表中移除<br>
+              · 修改 ID 后已上传图片路径将失效，请谨慎操作<br>
+              · 所有更改需点击"保存到 GitHub"才会生效
+            </p>
+            <button class="btn btn-primary" style="margin-top:12px;width:100%" onclick="saveDirChanges()">
+              💾 保存方向配置到 GitHub
+            </button>
+            <p id="save-dir-status" style="font-size:13px;margin-top:8px"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ SETTINGS TAB ═══ -->
+  <div id="panel-settings" class="admin-panel">
+    <div style="max-width:640px">
+      <div class="card">
+        <div class="card-hd">⚙ GitHub 仓库设置</div>
+        <div class="card-body">
+          <div class="form-row-2">
+            <div class="form-row" style="margin-bottom:0">
+              <label class="form-label" for="s-owner">GitHub 用户名</label>
+              <input type="text" class="form-input" id="s-owner" placeholder="your-username">
+            </div>
+            <div class="form-row" style="margin-bottom:0">
+              <label class="form-label" for="s-repo">仓库名称</label>
+              <input type="text" class="form-input" id="s-repo" placeholder="gsua-tracker">
+            </div>
+          </div>
+          <div class="form-row" style="margin-top:14px">
+            <label class="form-label" for="s-branch">分支名</label>
+            <input type="text" class="form-input" id="s-branch" placeholder="main" style="max-width:200px">
+          </div>
+          <div class="form-row">
+            <label class="form-label" for="s-token">Personal Access Token</label>
+            <input type="password" class="form-input" id="s-token" placeholder="ghp_xxxxxxxxxxxx">
+            <div class="form-hint">
+              需要 <code>repo</code> 权限。
+              <a href="https://github.com/settings/tokens/new?scopes=repo" target="_blank" rel="noopener">在 GitHub 创建 →</a>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-primary" onclick="saveSettings()">💾 保存设置</button>
+            <button class="btn btn-secondary" onclick="testConnection()">🔗 测试连接</button>
+            <button class="btn btn-secondary" onclick="clearSettings()">🗑 清除设置</button>
+          </div>
+          <p id="settings-status" style="font-size:13px;margin-top:10px"></p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hd">📦 数据管理</div>
+        <div class="card-body">
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn btn-secondary" onclick="exportData()">⬇ 导出 data.json</button>
+            <button class="btn btn-secondary" onclick="refreshData()">🔄 重新加载数据</button>
+          </div>
+          <p style="font-size:13px;color:var(--text-muted);margin-top:10px">
+            当前数据：<strong id="data-summary">未加载</strong>
+          </p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hd">📖 使用说明</div>
+        <div class="card-body" style="font-size:13px;color:var(--text-secondary);line-height:1.8">
+          <strong>首次使用流程：</strong><br>
+          1. 创建 GitHub 仓库并启用 GitHub Pages（Settings → Pages → Deploy from branch: main）<br>
+          2. 将所有文件（index.html、admin.html、data/ 目录）推送到仓库<br>
+          3. 在上方配置 GitHub 信息，填入 Personal Access Token<br>
+          4. 点击「测试连接 &amp; 加载数据」<br>
+          5. 开始上传图片和编写报告<br><br>
+          <strong>每日工作流程：</strong><br>
+          1. 截图或保存前线图 → 粘贴到「上传图片」标签页<br>
+          2. 选择方向和日期，点击上传<br>
+          3. 重复上传各个方向<br>
+          4. 切换到「编辑报告」，输入当日文字综述并保存
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Toast container -->
+<div id="toast-container" role="alert" aria-live="assertive"></div>
+
+<script>
+'use strict';
+
+// ───── STATE ─────
+let appData = null;
+let dataSha  = null;
+let pastedB64 = null;
+let pastedExt = 'png';
+let curTab = 'upload';
+
+// ───── INIT ─────
+window.addEventListener('DOMContentLoaded', () => {
+  loadConfigToUI();
+  syncSettingsUI();
+  qs('#up-date').value = todayStr();
+  qs('#rpt-date').value = todayStr();
+  // Auto-load if config exists
+  const cfg = getConfig();
+  if (cfg.token && cfg.owner && cfg.repo) {
+    testAndLoad();
+  } else {
+    openConfig();
+    toast('请先填写 GitHub 配置信息', 'warning');
+  }
+  setupPasteZone();
+});
+
+// ───── TAB SWITCHING ─────
+function switchTab(name) {
+  curTab = name;
+  document.querySelectorAll('.atab').forEach(b => {
+    const a = b.id === 'atab-' + name;
+    b.classList.toggle('active', a);
+    b.setAttribute('aria-selected', a ? 'true' : 'false');
+  });
+  document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+  qs('#panel-' + name).classList.add('active');
+}
+
+// ───── CONFIG ─────
+function toggleConfig() {
+  const body = qs('#cfg-body');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  qs('#cfg-toggle-icon').textContent = isOpen ? '▶' : '▼';
+  qs('#cfg-toggle-btn').setAttribute('aria-expanded', !isOpen);
+}
+function openConfig() {
+  qs('#cfg-body').classList.add('open');
+  qs('#cfg-toggle-icon').textContent = '▼';
+  qs('#cfg-toggle-btn').setAttribute('aria-expanded', 'true');
+}
+
+function getConfig() {
+  return {
+    owner:  localStorage.getItem('gsua_owner')  || '',
+    repo:   localStorage.getItem('gsua_repo')   || '',
+    branch: localStorage.getItem('gsua_branch') || 'main',
+    token:  localStorage.getItem('gsua_token')  || ''
+  };
+}
+function saveConfig() {
+  const o = val('cfg-owner').trim();
+  const r = val('cfg-repo').trim();
+  const b = val('cfg-branch').trim() || 'main';
+  const t = val('cfg-token').trim();
+  if (!o||!r||!t) { toast('请填写完整的配置信息', 'error'); return; }
+  localStorage.setItem('gsua_owner',  o);
+  localStorage.setItem('gsua_repo',   r);
+  localStorage.setItem('gsua_branch', b);
+  localStorage.setItem('gsua_token',  t);
+  qs('#cfg-status-inline').textContent = `${o}/${r}`;
+  syncSettingsUI();
+  toast('配置已保存', 'success');
+}
+function loadConfigToUI() {
+  const c = getConfig();
+  setVal('cfg-owner',  c.owner);
+  setVal('cfg-repo',   c.repo);
+  setVal('cfg-branch', c.branch);
+  setVal('cfg-token',  c.token);
+  if (c.owner && c.repo) {
+    qs('#cfg-status-inline').textContent = `${c.owner}/${c.repo}`;
+  }
+}
+function syncSettingsUI() {
+  const c = getConfig();
+  setVal('s-owner',  c.owner);
+  setVal('s-repo',   c.repo);
+  setVal('s-branch', c.branch);
+  setVal('s-token',  c.token);
+}
+function saveSettings() {
+  setVal('cfg-owner',  val('s-owner'));
+  setVal('cfg-repo',   val('s-repo'));
+  setVal('cfg-branch', val('s-branch'));
+  setVal('cfg-token',  val('s-token'));
+  saveConfig();
+}
+function clearSettings() {
+  if (!confirm('确认清除所有配置？')) return;
+  ['gsua_owner','gsua_repo','gsua_branch','gsua_token'].forEach(k => localStorage.removeItem(k));
+  ['cfg-owner','cfg-repo','cfg-branch','cfg-token','s-owner','s-repo','s-branch','s-token'].forEach(id => setVal(id,''));
+  toast('配置已清除', 'warning');
+}
+
+// ───── GITHUB API ─────
+async function ghGet(path) {
+  const c = getConfig();
+  const r = await fetch(`https://api.github.com/repos/${c.owner}/${c.repo}/contents/${path}?ref=${c.branch}`, {
+    headers: { 'Authorization': `Bearer ${c.token}`, 'Accept': 'application/vnd.github.v3+json' }
+  });
+  if (!r.ok) { const e = await r.json().catch(()=>({message:'HTTP '+r.status})); throw new Error(e.message||'HTTP '+r.status); }
+  return r.json();
+}
+
+async function ghPut(path, b64content, message, sha) {
+  const c = getConfig();
+  const body = { message, content: b64content, branch: c.branch };
+  if (sha) body.sha = sha;
+  const r = await fetch(`https://api.github.com/repos/${c.owner}/${c.repo}/contents/${path}`, {
+    method: 'PUT',
+    headers: { 'Authorization': `Bearer ${c.token}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) { const e = await r.json().catch(()=>({message:'HTTP '+r.status})); throw new Error(e.message||'HTTP '+r.status); }
+  return r.json();
+}
+
+async function getFileSha(path) {
+  try {
+    const f = await ghGet(path);
+    return f.sha || null;
+  } catch { return null; }
+}
+
+// Text to base64 (handles Unicode)
+function textToB64(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+function b64ToText(b64) {
+  return decodeURIComponent(escape(atob(b64.replace(/\n/g,''))));
+}
+
+// ───── LOAD / SAVE DATA ─────
+async function testAndLoad() {
+  setStatus('cfg-status', '⏳ 连接中…', 'color:var(--orange)');
+  try {
+    const file = await ghGet('data/data.json');
+    dataSha = file.sha;
+    appData = JSON.parse(b64ToText(file.content));
+    setStatus('cfg-status', '✅ 已连接，数据加载成功', 'color:var(--green)');
+    qs('#cfg-status-inline').textContent = `${getConfig().owner}/${getConfig().repo} · ${Object.keys(appData.entries||{}).length} 条记录`;
+    onDataLoaded();
+    toast('数据加载成功', 'success');
+  } catch(e) {
+    if (e.message.includes('404') || e.message.includes('Not Found')) {
+      // Initialize fresh
+      appData = await initFreshData();
+      toast('仓库中尚无数据，已初始化', 'warning');
+      onDataLoaded();
+    } else {
+      setStatus('cfg-status', '❌ ' + e.message, 'color:var(--red)');
+      toast('连接失败: ' + e.message, 'error');
+    }
+  }
+}
+
+async function testConnection() {
+  setStatus('settings-status', '⏳ 测试中…', 'color:var(--orange)');
+  saveSettings();
+  try {
+    const c = getConfig();
+    const r = await fetch(`https://api.github.com/repos/${c.owner}/${c.repo}`, {
+      headers: { 'Authorization': `Bearer ${c.token}` }
+    });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const info = await r.json();
+    setStatus('settings-status', `✅ 连接成功！仓库: ${info.full_name}`, 'color:var(--green)');
+    toast('GitHub 连接成功', 'success');
+  } catch(e) {
+    setStatus('settings-status', '❌ ' + e.message, 'color:var(--red)');
+    toast('连接失败: ' + e.message, 'error');
+  }
+}
+
+async function initFreshData() {
+  const fresh = {
+    directions: [
+      {"id":"sumy","name":"苏梅","aliases":["苏梅","Sumy"]},
+      {"id":"kharkiv","name":"哈尔科夫","aliases":["哈尔科夫","哈市","Kharkiv"]},
+      {"id":"kupyansk","name":"库普扬斯克","aliases":["库普扬斯克","库普","Kupyansk"]},
+      {"id":"lyman","name":"利曼","aliases":["利曼","Lyman"]},
+      {"id":"siversk","name":"西维尔斯克","aliases":["西维尔斯克","西维","Siversk"]},
+      {"id":"kramatorsk","name":"卡玛托尔斯克","aliases":["卡玛托尔斯克","卡玛","Kramatorsk"]},
+      {"id":"kostiantynivka","name":"康斯坦丁尼夫卡","aliases":["康斯坦丁尼夫卡","康城","Kostiantynivka"]},
+      {"id":"pokrovsk","name":"波克罗夫斯克","aliases":["波克罗夫斯克","波克","Pokrovsk"]},
+      {"id":"oleksandrivka","name":"亚历山德里夫卡","aliases":["亚历山德里夫卡","亚历山德","Oleksandrivka"]},
+      {"id":"huliaipole","name":"胡里艾伯勒","aliases":["胡里艾伯勒","胡里","Huliaipole"]},
+      {"id":"kuban","name":"库班","aliases":["库班","Kuban"]},
+      {"id":"kherson","name":"赫尔松","aliases":["赫尔松","赫市","Kherson"]}
+    ],
+    entries: {}
+  };
+  // Try to commit initial data.json
+  try {
+    const result = await ghPut('data/data.json', textToB64(JSON.stringify(fresh, null, 2)), '初始化 data.json', null);
+    dataSha = result.content.sha;
+  } catch(e) {
+    toast('无法写入初始数据: ' + e.message, 'error');
+  }
+  return fresh;
+}
+
+async function saveAppData(commitMsg) {
+  const b64 = textToB64(JSON.stringify(appData, null, 2));
+  const result = await ghPut('data/data.json', b64, commitMsg, dataSha);
+  dataSha = result.content.sha;
+}
+
+async function refreshData() {
+  await testAndLoad();
+}
+
+function onDataLoaded() {
+  populateDirectionSelect();
+  renderDirTable();
+  renderRecentList();
+  renderDataStats();
+  renderReportDateList();
+  qs('#dir-count').textContent = `共 ${(appData.directions||[]).length} 个方向`;
+}
+
+// ───── PASTE / UPLOAD ─────
+function setupPasteZone() {
+  const zone = qs('#paste-zone');
+
+  // Paste anywhere on page
+  document.addEventListener('paste', e => {
+    const items = [...(e.clipboardData?.items || [])];
+    for (const item of items) {
+      if (item.type.startsWith('image/')) {
+        e.preventDefault();
+        handleImageBlob(item.getAsFile(), item.type);
+        break;
+      }
+    }
+  });
+
+  // Drag & drop
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('paste-zone-active'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('paste-zone-active'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('paste-zone-active');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) handleImageBlob(file, file.type);
+  });
+}
+
+function handleFileInput(e) {
+  const file = e.target.files[0];
+  if (file) handleImageBlob(file, file.type);
+}
+
+function handleImageBlob(blob, mimeType) {
+  pastedExt = mimeType.split('/')[1]?.replace('jpeg','jpg') || 'png';
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const dataUrl = ev.target.result;
+    pastedB64 = dataUrl.split(',')[1];
+    const zone = qs('#paste-zone');
+    zone.classList.add('has-image');
+    zone.innerHTML = `<img src="${dataUrl}" alt="预览">`;
+    const sz = (blob.size / 1024).toFixed(1);
+    qs('#paste-info').style.display = '';
+    qs('#paste-info').textContent = `文件大小: ${sz} KB · 格式: ${pastedExt.toUpperCase()}`;
+    qs('#upload-btn').disabled = false;
+    setStatus('upload-status', '');
+  };
+  reader.readAsDataURL(blob);
+}
+
+function clearPaste() {
+  pastedB64 = null;
+  const zone = qs('#paste-zone');
+  zone.classList.remove('has-image');
+  zone.innerHTML = `
+    <input type="file" id="file-input" accept="image/*" aria-label="选择图片文件" onchange="handleFileInput(event)">
+    <div id="paste-hint">
+      <div class="paste-hint">
+        <strong>🖼 粘贴截图 / 拖入图片</strong>
+        Ctrl+V 粘贴截图，或点击此处选择文件<br>
+        <span style="font-size:12px;color:#999;margin-top:4px;display:block">支持 PNG、JPG、WEBP 等格式</span>
+      </div>
+    </div>`;
+  qs('#paste-info').style.display = 'none';
+  qs('#upload-btn').disabled = true;
+  setStatus('upload-status', '');
+}
+
+async function doUpload() {
+  if (!pastedB64) { toast('请先粘贴或选择图片', 'error'); return; }
+  const dirId = val('up-direction');
+  const date  = val('up-date');
+  if (!dirId) { toast('请选择前线方向', 'error'); return; }
+  if (!date)  { toast('请选择日期', 'error'); return; }
+  if (!appData) { toast('请先连接 GitHub 并加载数据', 'error'); return; }
+
+  const btn = qs('#upload-btn');
+  btn.disabled = true;
+
+  // Show progress
+  show('upload-progress');
+  setProgress(20, '正在上传图片…');
+
+  try {
+    const imgPath = `images/${date}/${dirId}.${pastedExt}`;
+    const existSha = await getFileSha(imgPath);
+    setProgress(50, '正在写入图片文件…');
+    await ghPut(imgPath, pastedB64, `上传 ${dirId} ${date} 前线图`, existSha);
+
+    setProgress(75, '正在更新数据索引…');
+
+    // Update appData
+    if (!appData.entries[date]) appData.entries[date] = { report: '', images: {} };
+    if (!appData.entries[date].images) appData.entries[date].images = {};
+    appData.entries[date].images[dirId] = imgPath;
+
+    await saveAppData(`上传 ${dirId} ${date} 前线图`);
+    setProgress(100, '完成！');
+
+    setTimeout(() => {
+      hide('upload-progress');
+      setProgress(0, '');
+      toast(`✅ ${getDir(dirId)} (${date}) 上传成功`, 'success');
+      setStatus('upload-status', '✅ 上传成功！');
+      btn.disabled = false;
+      renderRecentList();
+      renderDataStats();
+    }, 600);
+
+  } catch(e) {
+    hide('upload-progress');
+    btn.disabled = false;
+    toast('上传失败: ' + e.message, 'error');
+    setStatus('upload-status', '❌ ' + e.message);
+  }
+}
+
+function setProgress(pct, text) {
+  qs('#progress-fill').style.width = pct + '%';
+  qs('#upload-progress-text').textContent = text;
+}
+
+// ───── DIRECTION SELECT ─────
+function populateDirectionSelect() {
+  const sel = qs('#up-direction');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="">-- 请选择方向 --</option>';
+  (appData.directions || []).forEach(d => {
+    const opt = document.createElement('option');
+    opt.value = d.id;
+    opt.textContent = d.name;
+    sel.appendChild(opt);
+  });
+  if (cur) sel.value = cur;
+}
+
+// ───── REPORT ─────
+function onReportDateChange() {
+  // Try to load existing report for that date
+  const date = val('rpt-date');
+  if (appData?.entries?.[date]?.report) {
+    setVal('rpt-text', appData.entries[date].report);
+  } else {
+    // Don't clear if already typing
+  }
+  onReportInput();
+}
+
+function loadExistingReport() {
+  const date = val('rpt-date');
+  if (!appData?.entries?.[date]) {
+    toast(`${date} 暂无报告`, 'warning'); return;
+  }
+  setVal('rpt-text', appData.entries[date].report || '');
+  onReportInput();
+  toast('已加载现有报告', 'success');
+}
+
+function onReportInput() {
+  const text = val('rpt-text');
+  if (!appData) return;
+
+  // Detect place names
+  const detected = new Set();
+  (appData.directions || []).forEach(dir => {
+    const aliases = [...(dir.aliases || []), dir.name];
+    if (aliases.some(a => text.includes(a))) detected.add(dir.id);
+  });
+
+  // Update detected tags
+  const tags = qs('#detected-tags');
+  if (detected.size === 0) {
+    tags.innerHTML = '<span style="font-size:12px;color:var(--text-muted)">未检测到已知地名</span>';
+  } else {
+    tags.innerHTML = [...detected].map(id =>
+      `<span class="detected-tag">📍 ${esc(getDir(id))}</span>`
+    ).join('');
+  }
+
+  // Update preview
+  qs('#report-preview').innerHTML = text ? processReportPreview(text) : '<span style="color:var(--text-muted);font-size:13px">（无内容）</span>';
+}
+
+function processReportPreview(text) {
+  if (!appData?.directions) return esc(text).replace(/\n/g,'<br>');
+  const aliases = [];
+  appData.directions.forEach(dir => {
+    (dir.aliases||[dir.name]).forEach(a => aliases.push({alias:a,id:dir.id}));
+    aliases.push({alias:dir.name,id:dir.id});
+  });
+  aliases.sort((a,b) => b.alias.length - a.alias.length);
+  const seen = new Set();
+  const uniq = aliases.filter(a => { if(seen.has(a.alias)) return false; seen.add(a.alias); return true; });
+
+  let segs = [{text,link:false}];
+  uniq.forEach(({alias,id}) => {
+    const next = [];
+    segs.forEach(s => {
+      if(s.link){next.push(s);return;}
+      const parts = s.text.split(alias);
+      if(parts.length===1){next.push(s);return;}
+      parts.forEach((p,i) => {
+        if(p) next.push({text:p,link:false});
+        if(i<parts.length-1) next.push({text:alias,link:true,id});
+      });
+    });
+    segs = next;
+  });
+
+  return segs.map(s => s.link
+    ? `<span class="place-tag" title="${esc(getDir(s.id))}">🔗${esc(s.text)}</span>`
+    : esc(s.text).replace(/\n/g,'<br>')
+  ).join('');
+}
+
+async function saveReport() {
+  const date = val('rpt-date');
+  const text = val('rpt-text').trim();
+  if (!date) { toast('请选择日期', 'error'); return; }
+  if (!text) { toast('报告内容不能为空', 'error'); return; }
+  if (!appData) { toast('请先连接 GitHub', 'error'); return; }
+
+  setStatus('report-status', '⏳ 保存中…');
+  try {
+    if (!appData.entries[date]) appData.entries[date] = { report: '', images: {} };
+    appData.entries[date].report = text;
+    await saveAppData(`更新 ${date} 战况报告`);
+    setStatus('report-status', '✅ 保存成功', 'color:var(--green)');
+    renderReportDateList();
+    toast(`${date} 报告保存成功`, 'success');
+  } catch(e) {
+    setStatus('report-status', '❌ ' + e.message, 'color:var(--red)');
+    toast('保存失败: ' + e.message, 'error');
+  }
+}
+
+function renderReportDateList() {
+  const el = qs('#report-dates-list');
+  if (!appData?.entries) { el.innerHTML = '<p style="color:var(--text-muted);font-size:13px">暂无记录</p>'; return; }
+  const dates = Object.entries(appData.entries)
+    .filter(([,e]) => e.report)
+    .map(([d]) => d)
+    .sort()
+    .reverse();
+  if (!dates.length) { el.innerHTML = '<p style="color:var(--text-muted);font-size:13px">暂无报告</p>'; return; }
+  el.innerHTML = dates.map(d =>
+    `<div style="padding:5px 0;border-bottom:1px solid var(--border-light);display:flex;justify-content:space-between;align-items:center">
+       <button style="background:none;border:none;color:var(--link-color);text-decoration:underline;cursor:pointer;font-size:13px;font-family:inherit" onclick="loadDateReport('${d}')">${fmtDate(d)}</button>
+       <span style="font-size:11px;color:var(--text-muted)">${(appData.entries[d].report||'').length} 字</span>
+     </div>`
+  ).join('');
+}
+
+function loadDateReport(date) {
+  setVal('rpt-date', date);
+  setVal('rpt-text', appData.entries[date]?.report || '');
+  onReportInput();
+  switchTab('report');
+}
+
+// ───── DIRECTION MANAGEMENT ─────
+function renderDirTable() {
+  const tbody = qs('#dir-table-body');
+  if (!appData?.directions) { tbody.innerHTML = '<tr><td colspan="5" style="color:var(--text-muted)">暂无数据</td></tr>'; return; }
+  tbody.innerHTML = appData.directions.map((dir, i) =>
+    `<tr>
+       <td>${i+1}</td>
+       <td><strong>${esc(dir.name)}</strong></td>
+       <td><code style="font-size:12px;background:#f0f0f0;padding:2px 6px;border-radius:3px">${esc(dir.id)}</code></td>
+       <td>${(dir.aliases||[]).map(a => `<span class="dir-badge">${esc(a)}</span>`).join('')}</td>
+       <td>
+         <button class="btn btn-danger btn-sm" onclick="removeDirection('${esc(dir.id)}')"
+                 aria-label="删除 ${esc(dir.name)}">删除</button>
+       </td>
+     </tr>`
+  ).join('');
+  qs('#dir-count').textContent = `共 ${appData.directions.length} 个方向`;
+}
+
+// Auto-generate ID from Chinese name
+qs('#new-dir-name')?.addEventListener('input', function() {
+  const id = this.value.trim()
+    .toLowerCase()
+    .replace(/[\u4e00-\u9fff]+/g, '') // remove Chinese
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+  // If result is empty (all Chinese), use pinyin hint
+  if (!id) qs('#new-dir-id').placeholder = '请手动输入英文 ID';
+  else setVal('new-dir-id', id);
+});
+
+function addDirection() {
+  const name = val('new-dir-name').trim();
+  const id   = val('new-dir-id').trim().toLowerCase().replace(/[^a-z0-9-]/g, '');
+  const aliases = val('new-dir-aliases').split(',').map(s => s.trim()).filter(Boolean);
+
+  if (!name) { setStatus('add-dir-status', '❌ 请填写名称', 'color:var(--red)'); return; }
+  if (!id)   { setStatus('add-dir-status', '❌ 请填写 ID', 'color:var(--red)'); return; }
+  if (appData.directions.some(d => d.id === id)) {
+    setStatus('add-dir-status', '❌ ID 已存在', 'color:var(--red)'); return;
+  }
+
+  if (!appData.directions) appData.directions = [];
+  appData.directions.push({ id, name, aliases: [...aliases, name] });
+
+  renderDirTable();
+  populateDirectionSelect();
+  setVal('new-dir-name', ''); setVal('new-dir-id', ''); setVal('new-dir-aliases', '');
+  setStatus('add-dir-status', `✅ 已添加"${name}"，请保存到 GitHub`, 'color:var(--green)');
+}
+
+function removeDirection(id) {
+  if (!confirm(`确认删除"${getDir(id)}"方向？（已上传的图片不会被删除）`)) return;
+  appData.directions = appData.directions.filter(d => d.id !== id);
+  renderDirTable();
+  populateDirectionSelect();
+  toast(`已移除"${getDir(id)}"，请保存到 GitHub`, 'warning');
+}
+
+async function saveDirChanges() {
+  setStatus('save-dir-status', '⏳ 保存中…');
+  try {
+    await saveAppData('更新方向配置');
+    setStatus('save-dir-status', '✅ 已保存到 GitHub', 'color:var(--green)');
+    toast('方向配置已保存', 'success');
+  } catch(e) {
+    setStatus('save-dir-status', '❌ ' + e.message, 'color:var(--red)');
+    toast('保存失败: ' + e.message, 'error');
+  }
+}
+
+// ───── STATS / RECENT ─────
+function renderDataStats() {
+  const el = qs('#data-stats');
+  const summary = qs('#data-summary');
+  if (!appData) return;
+  const totalEntries = Object.keys(appData.entries||{}).length;
+  const totalImages  = Object.values(appData.entries||{}).reduce((n,e) => n + Object.keys(e.images||{}).length, 0);
+  const totalReports = Object.values(appData.entries||{}).filter(e => e.report).length;
+  const text = `${totalEntries} 日期 · ${totalImages} 张图片 · ${totalReports} 份报告`;
+  if (summary) summary.textContent = text;
+  el.innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center">
+      <div style="background:#EEF2FA;border:1px solid var(--border-light);border-radius:var(--radius);padding:12px">
+        <div style="font-size:24px;font-weight:bold;color:var(--blue-700)">${totalEntries}</div>
+        <div style="font-size:12px;color:var(--text-muted)">记录日期</div>
+      </div>
+      <div style="background:#EEF2FA;border:1px solid var(--border-light);border-radius:var(--radius);padding:12px">
+        <div style="font-size:24px;font-weight:bold;color:var(--blue-700)">${totalImages}</div>
+        <div style="font-size:12px;color:var(--text-muted)">前线图片</div>
+      </div>
+      <div style="background:#EEF2FA;border:1px solid var(--border-light);border-radius:var(--radius);padding:12px">
+        <div style="font-size:24px;font-weight:bold;color:var(--blue-700)">${totalReports}</div>
+        <div style="font-size:12px;color:var(--text-muted)">文字报告</div>
+      </div>
+    </div>`;
+}
+
+function renderRecentList() {
+  const el = qs('#recent-list');
+  if (!appData?.entries) { el.innerHTML = '<p style="font-size:13px;color:var(--text-muted)">暂无记录</p>'; return; }
+
+  const items = [];
+  Object.entries(appData.entries).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,5).forEach(([date, entry]) => {
+    Object.entries(entry.images||{}).forEach(([dirId, path]) => {
+      items.push({ date, dirId, path });
+    });
+  });
+
+  if (!items.length) { el.innerHTML = '<p style="font-size:13px;color:var(--text-muted)">暂无上传记录</p>'; return; }
+
+  el.innerHTML = items.slice(0,10).map(({date,dirId,path}) =>
+    `<div class="recent-item">
+       <img class="recent-thumb" src="${esc(path)}" alt="" onerror="this.style.background='#ddd'">
+       <div class="recent-info">
+         <div class="ri-dir">${esc(getDir(dirId))}</div>
+         <div class="ri-date">${fmtDate(date)}</div>
+       </div>
+     </div>`
+  ).join('');
+}
+
+// ───── EXPORT ─────
+function exportData() {
+  if (!appData) { toast('请先加载数据', 'error'); return; }
+  const blob = new Blob([JSON.stringify(appData, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'data.json'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ───── HELPERS ─────
+function todayStr() {
+  return new Date().toISOString().slice(0,10);
+}
+function fmtDate(d) {
+  if (!d) return '—';
+  const [y,m,day] = d.split('-');
+  return `${y}年${m}月${day}日`;
+}
+function getDir(id) {
+  return appData?.directions?.find(d => d.id === id)?.name || id;
+}
+function esc(s) {
+  const d = document.createElement('div');
+  d.appendChild(document.createTextNode(String(s||'')));
+  return d.innerHTML;
+}
+function qs(sel)  { return document.querySelector(sel); }
+function val(id)  { return (document.getElementById(id)||{}).value || ''; }
+function setVal(id, v) { const el = document.getElementById(id); if(el) el.value = v; }
+function show(id) { const el = document.getElementById(id); if(el) el.style.display = ''; }
+function hide(id) { const el = document.getElementById(id); if(el) el.style.display = 'none'; }
+function setStatus(id, html, style) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = html;
+  el.setAttribute('style', style || '');
+}
+
+function toast(msg, type='info') {
+  const container = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = 'toast ' + type;
+  t.textContent = msg;
+  container.appendChild(t);
+  setTimeout(() => { t.style.opacity='0'; t.style.transition='opacity 0.3s'; setTimeout(()=>t.remove(),300); }, 3500);
+}
+</script>
+</body>
+</html>
