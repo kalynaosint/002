@@ -1,9 +1,9 @@
 * { box-sizing: border-box; }
 
 :root {
-  --blue-900: #002d72;
-  --blue-800: #003da5;
-  --blue-700: #0057b8;
+  --blue-900: #4a4632;
+  --blue-800: #4a4632;
+  --blue-700: #f59a00;
   --gray-050: #f7f7f7;
   --gray-100: #eeeeee;
   --gray-300: #c9c9c9;
@@ -21,7 +21,7 @@ body {
 }
 
 a {
-  color: #004b9b;
+  color: #4a4632;
   text-decoration: underline;
 }
 
@@ -159,7 +159,7 @@ button:focus, a:focus, input:focus, textarea:focus {
 .plain-link-btn {
   border: 0;
   background: transparent;
-  color: #004b9b;
+  color: #4a4632;
   text-decoration: underline;
   cursor: pointer;
   font-weight: 700;
@@ -511,15 +511,618 @@ button:focus, a:focus, input:focus, textarea:focus {
 }
 
 
-/* =========================================================
-   CLEAN REBUILT THEME
-   Palette:
-   - Olive Brown: #4a4632
-   - Golden Orange: #f59a00
-   Background image path:
-   - assets/background.jpg
-   ========================================================= */
+/* v5 stronger American enterprise / accessibility interaction style */
 
+body {
+  background:
+    linear-gradient(180deg, #f5f6f8 0%, #eceff3 100%);
+}
+
+.topbar {
+  background: #0614d8;
+  border-bottom: 5px solid #02106f;
+}
+
+.brand-link {
+  border: 3px solid transparent;
+  border-radius: 22px;
+  padding: 8px 14px;
+}
+
+.brand-link:hover,
+.brand-link:focus,
+.brand-link.is-selected {
+  color: white;
+  background: #0614d8;
+  border-color: white;
+  box-shadow: 0 0 0 4px #111;
+}
+
+.nav-link {
+  background: #0614d8;
+  border: 3px solid transparent;
+  border-radius: 0;
+  padding: 18px 24px;
+  color: white;
+  text-decoration-color: white;
+  text-underline-offset: 3px;
+}
+
+.nav-link:hover,
+.nav-link:focus,
+.nav-link.is-selected {
+  background: white;
+  color: #0614d8;
+  text-decoration-color: #0614d8;
+  border-color: #111;
+  box-shadow: inset 0 0 0 3px white, 0 0 0 4px #111;
+}
+
+.nav-link.active {
+  background: white;
+  color: #0614d8;
+  border-color: #111;
+  box-shadow: inset 0 0 0 3px #0614d8, 0 0 0 2px #fff;
+}
+
+.control-band,
+.side-panel,
+.main-panel {
+  border: 3px solid #1a1a1a;
+  border-radius: 0;
+  box-shadow: 0 4px 0 #c8c8c8;
+}
+
+.current-date-box {
+  border: 3px solid #1a1a1a;
+  border-radius: 0;
+  background: white;
+}
+
+.blue-btn,
+.direction-btn,
+.plain-link-btn,
+.small-btn,
+.nav-link,
+.preview-card button,
+.calendar-day {
+  transition: none !important;
+}
+
+.blue-btn {
+  border-radius: 0;
+  background: #0614d8;
+  border: 3px solid #0614d8;
+  text-decoration: underline;
+  text-decoration-color: white;
+  text-underline-offset: 3px;
+}
+
+.blue-btn.outline,
+.small-btn {
+  border-radius: 0;
+  border: 3px solid #0614d8;
+  color: #0614d8;
+  background: white;
+  text-decoration: underline;
+  text-decoration-color: #0614d8;
+  text-underline-offset: 3px;
+}
+
+.blue-btn:hover,
+.blue-btn:focus,
+.blue-btn.is-selected,
+.blue-btn.outline:hover,
+.blue-btn.outline:focus,
+.blue-btn.outline.is-selected,
+.small-btn:hover,
+.small-btn:focus,
+.small-btn.is-selected {
+  background: white;
+  color: #0614d8;
+  border-color: #111;
+  text-decoration-color: #0614d8;
+  box-shadow: inset 0 0 0 3px white, 0 0 0 4px #111;
+}
+
+.blue-btn.outline:hover,
+.blue-btn.outline:focus,
+.blue-btn.outline.is-selected,
+.small-btn:hover,
+.small-btn:focus,
+.small-btn.is-selected {
+  background: #0614d8;
+  color: white;
+  text-decoration-color: white;
+}
+
+.blue-btn:active,
+.blue-btn.outline:active,
+.direction-btn:active,
+.preview-card button:active,
+.plain-link-btn:active,
+.nav-link:active,
+.calendar-day.has-record:active {
+  background: #0614d8 !important;
+  color: white !important;
+  text-decoration-color: white !important;
+  border-color: #111 !important;
+  box-shadow: inset 0 0 0 4px #fff, 0 0 0 5px #111 !important;
+}
+
+.direction-btn {
+  border-radius: 0;
+  border: 3px solid #0614d8;
+  color: #0614d8;
+  background: white;
+  text-decoration-color: #0614d8;
+  text-underline-offset: 3px;
+}
+
+.direction-btn:hover,
+.direction-btn:focus,
+.direction-btn.is-selected {
+  background: #0614d8;
+  color: white;
+  border-color: #111;
+  text-decoration-color: white;
+  box-shadow: inset 0 0 0 3px white, 0 0 0 4px #111;
+}
+
+.direction-btn.active {
+  background: #0614d8;
+  color: white;
+  border-color: #111;
+  text-decoration-color: white;
+  box-shadow: inset 0 0 0 3px white, 0 0 0 3px #111;
+}
+
+.panel-title-row {
+  border-bottom: 4px solid #0614d8;
+}
+
+.news-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 390px) minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.daily-report-card {
+  border: 3px solid #111;
+  background: #fff;
+  padding: 0;
+  box-shadow: 0 4px 0 #d0d0d0;
+}
+
+.report-kicker {
+  background: #0614d8;
+  color: white;
+  padding: 10px 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  border-bottom: 3px solid #111;
+}
+
+.daily-report-card h2 {
+  margin: 0;
+  padding: 14px 14px 8px;
+  font-size: 26px;
+}
+
+.daily-report-card .report-body {
+  border: 0;
+  border-top: 2px solid #d6d6d6;
+  border-radius: 0;
+  min-height: 380px;
+  font-size: 17px;
+  background: #fff;
+}
+
+.daily-report-card .report-body a {
+  color: #0614d8;
+  text-decoration-color: #0614d8;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  border: 3px solid transparent;
+  padding: 0 2px;
+}
+
+.daily-report-card .report-body a:hover,
+.daily-report-card .report-body a:focus,
+.daily-report-card .report-body a.is-selected {
+  background: #0614d8;
+  color: white;
+  text-decoration-color: white;
+  border-color: #111;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 6px #111;
+}
+
+.overview-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.preview-card {
+  border-radius: 0;
+  border: 3px solid #111;
+  background: white;
+  box-shadow: 0 3px 0 #d0d0d0;
+}
+
+.preview-card button {
+  border: 4px solid transparent;
+  text-decoration: underline;
+  text-decoration-color: white;
+}
+
+.preview-card button:hover,
+.preview-card button:focus,
+.preview-card button.is-selected {
+  border-color: #111;
+  box-shadow: inset 0 0 0 3px white, 0 0 0 3px #111;
+}
+
+.preview-card-title {
+  background: #0614d8;
+  text-decoration-color: white;
+  text-underline-offset: 3px;
+  border-bottom: 3px solid #111;
+}
+
+.image-frame.large {
+  border-radius: 0;
+  border: 3px solid #111;
+  box-shadow: 0 4px 0 #d0d0d0;
+}
+
+.calendar-popover {
+  border: 4px solid #111;
+  border-radius: 0;
+  box-shadow: 0 5px 0 #c8c8c8;
+}
+
+.calendar-weekdays,
+.calendar-grid {
+  gap: 8px;
+}
+
+.calendar-day {
+  width: 42px;
+  height: 42px;
+  min-height: 42px;
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background: transparent;
+  color: #888;
+  justify-self: center;
+}
+
+.calendar-day:not(.blank):not(:disabled):hover {
+  background: #e5e5e5;
+  color: #111;
+  border-color: #999;
+}
+
+.calendar-day.has-record {
+  background: transparent;
+  color: #111;
+  border-color: transparent;
+  text-decoration: underline;
+  text-decoration-color: #111;
+  text-underline-offset: 3px;
+}
+
+.calendar-day.has-record:hover,
+.calendar-day.has-record:focus,
+.calendar-day.has-record.is-selected {
+  background: #e5e5e5;
+  color: #111;
+  border-color: #111;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 6px #111;
+}
+
+.calendar-day.selected {
+  background: #111;
+  color: white;
+  border: 4px solid #111;
+  box-shadow: 0 0 0 4px #fff, 0 0 0 7px #111;
+  text-decoration-color: white;
+}
+
+.calendar-day:disabled {
+  color: #b7b7b7;
+  cursor: not-allowed;
+}
+
+.text-input,
+.report-editor,
+.json-box {
+  border-radius: 0;
+  border: 3px solid #555;
+}
+
+.upload-card {
+  border-radius: 0;
+  border: 3px solid #111;
+}
+
+.upload-card h3 {
+  background: #0614d8;
+  border-bottom: 3px solid #111;
+}
+
+.paste-zone {
+  border-radius: 0;
+  border: 3px dashed #111;
+}
+
+@media (max-width: 1100px) {
+  .news-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 980px) {
+  .overview-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* v6 palette + background image support
+   Put your background image here:
+   assets/background.jpg
+   If you use PNG/WebP, change the URL below.
+*/
+
+:root {
+  --blue-900: #4a4632;
+  --blue-800: #5a5439;
+  --blue-700: #f59a00;
+  --accent-orange: #f59a00;
+  --field-olive: #4a4632;
+}
+
+body {
+  background-color: #4a4632;
+  background-image:
+    linear-gradient(rgba(245, 246, 248, 0.90), rgba(236, 239, 243, 0.90)),
+    url("assets/background.jpg");
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+}
+
+.topbar {
+  background: #4a4632;
+  border-bottom: 5px solid #f59a00;
+}
+
+.brand-link {
+  color: #f59a00;
+}
+
+/* Default: no underline or thick frame until selected/focused */
+.nav-link,
+.blue-btn,
+.blue-btn.outline,
+.small-btn,
+.direction-btn,
+.plain-link-btn,
+.preview-card button,
+.daily-report-card .report-body a {
+  text-decoration: none !important;
+  box-shadow: none;
+  transition: none !important;
+}
+
+.nav-link {
+  background: #4a4632;
+  color: #f59a00;
+  border: 3px solid transparent;
+}
+
+.nav-link:hover {
+  background: #4a4632;
+  color: #f59a00;
+  border-color: transparent;
+  text-decoration: none !important;
+  box-shadow: none;
+}
+
+.nav-link.active,
+.nav-link.is-selected,
+.nav-link:focus {
+  background: #f59a00;
+  color: #4a4632;
+  border-color: #111;
+  text-decoration: underline !important;
+  text-decoration-color: #4a4632 !important;
+  text-underline-offset: 3px;
+  box-shadow: inset 0 0 0 3px #fff, 0 0 0 4px #111;
+}
+
+.blue-btn {
+  background: #f59a00;
+  color: #111;
+  border: 3px solid #f59a00;
+}
+
+.blue-btn.outline,
+.small-btn,
+.direction-btn {
+  background: #fff;
+  color: #4a4632;
+  border: 3px solid #4a4632;
+}
+
+.blue-btn:hover,
+.blue-btn.outline:hover,
+.small-btn:hover,
+.direction-btn:hover,
+.plain-link-btn:hover,
+.preview-card button:hover {
+  text-decoration: none !important;
+  box-shadow: none;
+}
+
+.blue-btn.is-selected,
+.blue-btn:focus,
+.blue-btn.outline.is-selected,
+.blue-btn.outline:focus,
+.small-btn.is-selected,
+.small-btn:focus,
+.direction-btn.is-selected,
+.direction-btn:focus,
+.preview-card button.is-selected,
+.preview-card button:focus,
+.plain-link-btn.is-selected,
+.plain-link-btn:focus {
+  background: #4a4632;
+  color: #f59a00;
+  border-color: #111;
+  text-decoration: underline !important;
+  text-decoration-color: #f59a00 !important;
+  text-underline-offset: 3px;
+  box-shadow: inset 0 0 0 3px #fff, 0 0 0 4px #111;
+}
+
+.direction-btn.active,
+.nav-link.active {
+  background: #f59a00;
+  color: #4a4632;
+  border-color: #111;
+  text-decoration: underline !important;
+  text-decoration-color: #4a4632 !important;
+  text-underline-offset: 3px;
+  box-shadow: inset 0 0 0 3px #fff, 0 0 0 4px #111;
+}
+
+.panel-title-row {
+  border-bottom-color: #f59a00;
+}
+
+.report-kicker,
+.preview-card-title,
+.upload-card h3 {
+  background: #4a4632;
+  color: #f59a00;
+}
+
+.daily-report-card .report-body a {
+  color: #4a4632;
+  border: 3px solid transparent;
+}
+
+.daily-report-card .report-body a:hover {
+  text-decoration: none !important;
+  box-shadow: none;
+}
+
+.daily-report-card .report-body a.is-selected,
+.daily-report-card .report-body a:focus {
+  background: #4a4632;
+  color: #f59a00;
+  text-decoration: underline !important;
+  text-decoration-color: #f59a00 !important;
+  text-underline-offset: 3px;
+  border-color: #111;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 6px #111;
+}
+
+/* Calendar */
+.calendar-day {
+  text-decoration: none !important;
+  transition: none !important;
+}
+
+.calendar-day.has-record {
+  background: transparent;
+  color: #111;
+  border-color: transparent;
+  text-decoration: none !important;
+}
+
+.calendar-day:not(.blank):not(:disabled):hover,
+.calendar-day.has-record:hover {
+  background: #e5e5e5;
+  color: #111;
+  border-color: transparent;
+  text-decoration: none !important;
+  box-shadow: none;
+}
+
+.calendar-day.is-selected,
+.calendar-day.has-record:focus {
+  background: #4a4632;
+  color: #f59a00;
+  border-color: #111;
+  text-decoration: underline !important;
+  text-decoration-color: #f59a00 !important;
+  text-underline-offset: 3px;
+  box-shadow: 0 0 0 3px #fff, 0 0 0 6px #111;
+}
+
+.calendar-day.selected {
+  background: #111;
+  color: #f59a00;
+  border: 4px solid #111;
+  box-shadow: 0 0 0 4px #fff, 0 0 0 7px #111;
+  text-decoration: underline !important;
+  text-decoration-color: #f59a00 !important;
+  text-underline-offset: 3px;
+}
+
+.calendar-day:disabled {
+  color: #b7b7b7;
+  cursor: not-allowed;
+}
+
+.control-band,
+.side-panel,
+.main-panel,
+.daily-report-card,
+.preview-card,
+.image-frame.large,
+.calendar-popover,
+.upload-card {
+  border-color: #111;
+}
+
+button:hover,
+a:hover {
+  transition: none !important;
+}
+
+button:not(.active):not(.is-selected):hover,
+a:not(.active):not(.is-selected):hover {
+  text-decoration: none !important;
+}
+
+button:focus,
+a:focus,
+input:focus,
+textarea:focus {
+  outline: none;
+}
+
+input:focus,
+textarea:focus {
+  box-shadow: 0 0 0 4px #111;
+}
+
+a {
+  color: #4a4632;
+}
+
+/* 最终覆盖：去掉残留蓝色 */
 :root {
   --blue-900: #4a4632;
   --blue-800: #4a4632;
@@ -527,21 +1130,7 @@ button:focus, a:focus, input:focus, textarea:focus {
 }
 
 * {
-  box-sizing: border-box;
   accent-color: #f59a00;
-}
-
-body {
-  background-image: url("assets/background.jpg");
-  background-size: cover;
-  background-position: center center;
-  background-attachment: fixed;
-  background-color: #4a4632;
-}
-
-a {
-  color: #4a4632;
-  text-decoration: none;
 }
 
 button,
@@ -550,27 +1139,28 @@ a,
 .blue-btn,
 .direction-btn,
 .small-btn,
-.plain-link-btn,
-.preview-card button,
-.calendar-day {
-  transition: none !important;
+.plain-link-btn {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Remove default focus outline */
+button:hover,
 button:focus,
+button:active,
+a:hover,
 a:focus,
-input:focus,
-textarea:focus {
+a:active {
   outline: none !important;
 }
 
-input:focus,
-textarea:focus {
-  box-shadow: 0 0 0 4px #111;
+/* 背景图 100% 不加白色遮罩 */
+body {
+  background-image: url("assets/background.jpg") !important;
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
 }
 
-/* Transparent panels */
+/* 容器微微透出背景 */
 .control-band,
 .side-panel,
 .main-panel,
@@ -581,198 +1171,13 @@ textarea:focus {
 .report-body,
 .current-date-box {
   background-color: rgba(255, 255, 255, 0.88) !important;
-  border: 3px solid #111 !important;
-  border-radius: 0 !important;
-  box-shadow: 0 4px 0 rgba(0, 0, 0, 0.18) !important;
 }
 
-/* Header and title bars */
-.topbar,
+/* 深色标题区仍保持可读 */
 .report-kicker,
 .preview-card-title,
-.upload-card h3 {
+.upload-card h3,
+.topbar {
   background-color: rgba(74, 70, 50, 0.96) !important;
   color: #f59a00 !important;
-}
-
-.topbar {
-  border-bottom: 5px solid #f59a00 !important;
-}
-
-.brand-link {
-  color: #f59a00 !important;
-  text-decoration: none !important;
-}
-
-/* Default button/link state (no underline, no thick frame) */
-.nav-link,
-.blue-btn,
-.blue-btn.outline,
-.small-btn,
-.direction-btn,
-.plain-link-btn,
-.preview-card button,
-.daily-report-card .report-body a {
-  text-decoration: none !important;
-  box-shadow: none !important;
-}
-
-/* Base colors */
-.nav-link {
-  background: #4a4632 !important;
-  color: #f59a00 !important;
-  border: 3px solid transparent !important;
-  border-radius: 0 !important;
-}
-
-.blue-btn {
-  background: #f59a00 !important;
-  color: #111 !important;
-  border: 3px solid #f59a00 !important;
-  border-radius: 0 !important;
-}
-
-.blue-btn.outline,
-.small-btn,
-.direction-btn {
-  background: #ffffff !important;
-  color: #4a4632 !important;
-  border: 3px solid #4a4632 !important;
-  border-radius: 0 !important;
-}
-
-.plain-link-btn {
-  color: #4a4632 !important;
-}
-
-/* Hover state: same as selected (olive + orange) */
-.nav-link:hover,
-.blue-btn:hover,
-.blue-btn.outline:hover,
-.small-btn:hover,
-.direction-btn:hover,
-.preview-card button:hover,
-.plain-link-btn:hover,
-.daily-report-card .report-body a:hover {
-  background: #4a4632 !important;
-  color: #f59a00 !important;
-  border-color: #111 !important;
-  text-decoration: underline !important;
-  text-decoration-color: #f59a00 !important;
-  text-underline-offset: 3px !important;
-  box-shadow:
-    inset 0 0 0 3px #ffffff,
-    0 0 0 4px #111111 !important;
-}
-
-/* Clicked / focused / JS-selected state */
-.nav-link:active,
-.nav-link:focus,
-.nav-link.is-selected,
-.blue-btn:active,
-.blue-btn:focus,
-.blue-btn.is-selected,
-.blue-btn.outline:active,
-.blue-btn.outline:focus,
-.blue-btn.outline.is-selected,
-.small-btn:active,
-.small-btn:focus,
-.small-btn.is-selected,
-.direction-btn:active,
-.direction-btn:focus,
-.direction-btn.is-selected,
-.preview-card button:active,
-.preview-card button:focus,
-.preview-card button.is-selected,
-.plain-link-btn:active,
-.plain-link-btn:focus,
-.plain-link-btn.is-selected,
-.daily-report-card .report-body a:active,
-.daily-report-card .report-body a:focus,
-.daily-report-card .report-body a.is-selected {
-  background: #4a4632 !important;
-  color: #f59a00 !important;
-  border-color: #111 !important;
-  text-decoration: underline !important;
-  text-decoration-color: #f59a00 !important;
-  text-underline-offset: 3px !important;
-  box-shadow:
-    inset 0 0 0 3px #ffffff,
-    0 0 0 4px #111111 !important;
-}
-
-/* Persistent active items */
-.nav-link.active,
-.direction-btn.active {
-  background: #4a4632 !important;
-  color: #f59a00 !important;
-  border-color: #111 !important;
-  text-decoration: underline !important;
-  text-decoration-color: #f59a00 !important;
-  text-underline-offset: 3px !important;
-  box-shadow:
-    inset 0 0 0 3px #ffffff,
-    0 0 0 4px #111111 !important;
-}
-
-/* Section accents */
-.panel-title-row {
-  border-bottom: 4px solid #f59a00 !important;
-}
-
-.preview-card-title,
-.upload-card h3,
-.report-kicker {
-  border-bottom: 3px solid #111 !important;
-}
-
-.preview-card,
-.upload-card,
-.image-frame.large,
-.calendar-popover {
-  border-radius: 0 !important;
-}
-
-/* Calendar */
-.calendar-day {
-  width: 42px;
-  height: 42px;
-  min-height: 42px;
-  border-radius: 999px !important;
-  border: 2px solid transparent !important;
-  background: transparent !important;
-  color: #888 !important;
-  font-weight: 700;
-  text-decoration: none !important;
-}
-
-.calendar-day.has-record {
-  color: #111 !important;
-}
-
-.calendar-day:not(.blank):not(:disabled):hover {
-  background: #4a4632 !important;
-  color: #f59a00 !important;
-  border-color: #111 !important;
-  text-decoration: underline !important;
-  text-decoration-color: #f59a00 !important;
-  box-shadow:
-    0 0 0 3px #ffffff,
-    0 0 0 6px #111111 !important;
-}
-
-.calendar-day.selected {
-  background: #111 !important;
-  color: #f59a00 !important;
-  border: 4px solid #111 !important;
-  text-decoration: underline !important;
-  text-decoration-color: #f59a00 !important;
-  box-shadow:
-    0 0 0 4px #ffffff,
-    0 0 0 7px #111111 !important;
-}
-
-.calendar-day:disabled {
-  color: #b7b7b7 !important;
-  cursor: not-allowed;
 }
