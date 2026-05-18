@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GSUA 前线图档案</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="viewer">
+  <header class="topbar">
+    <div class="brand-row">
+      <a class="brand-link" href="index.html" aria-label="返回首页">GSUA Frontline Archive</a>
+      <nav class="topnav" aria-label="主导航">
+        <a class="nav-link active" href="index.html">观看</a>
+        <a class="nav-link" href="admin.html">后台</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="control-band" aria-label="日期控制">
+      <div class="date-control">
+        <button class="blue-btn outline" id="prevDateBtn" type="button">‹ 上一个记录日</button>
+        <div class="current-date-box">
+          <span class="field-label">当前日期</span>
+          <strong id="currentDateText">—</strong>
+        </div>
+        <button class="blue-btn outline" id="nextDateBtn" type="button">下一个记录日 ›</button>
+        <button class="blue-btn" id="openCalendarBtn" type="button">打开日历</button>
+      </div>
+
+      <div class="calendar-popover hidden" id="calendarPopover" aria-label="日期日历">
+        <div class="calendar-head">
+          <button class="small-btn" id="calPrevMonth" type="button">‹</button>
+          <strong id="calendarMonthLabel">—</strong>
+          <button class="small-btn" id="calNextMonth" type="button">›</button>
+        </div>
+        <div class="calendar-weekdays">
+          <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+        <p class="hint-line">黑色日期表示有记录；灰色日期不可选择。箭头会自动跳过无记录日期。</p>
+      </div>
+    </section>
+
+    <section class="viewer-grid">
+      <aside class="side-panel">
+        <h2>方向选择</h2>
+        <p class="side-note">先选日期查看当天总览；点击方向后，可在同一拍摄范围内切换日期对比变化。</p>
+        <div class="direction-list" id="viewerDirectionList"></div>
+      </aside>
+
+      <section class="main-panel">
+        <div class="panel-title-row">
+          <div>
+            <h1 id="viewerTitle">最新前线总览</h1>
+            <p id="viewerSubtitle">显示当前记录日的全部方向预览。</p>
+          </div>
+          <button class="plain-link-btn" id="backToOverviewBtn" type="button">返回当天总览</button>
+        </div>
+
+        <section class="news-layout">
+          <article class="daily-report-card">
+            <div class="report-kicker">Daily Frontline Report</div>
+            <h2>当日文字报告</h2>
+            <div class="report-body" id="reportBody">暂无报告。</div>
+          </article>
+
+          <div class="overview-grid" id="overviewGrid"></div>
+
+          <article class="detail-view hidden" id="detailView">
+            <div class="image-frame large">
+              <img id="detailImage" alt="方向前线图" />
+              <div class="empty-state" id="detailEmpty">当前日期缺少该方向图片</div>
+            </div>
+          </article>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
