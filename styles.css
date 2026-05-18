@@ -1121,3 +1121,82 @@ textarea:focus {
 a {
   color: #4a4632;
 }
+
+/* 最终覆盖：去掉残留蓝色 */
+:root {
+  --blue-900: #4a4632;
+  --blue-800: #4a4632;
+  --blue-700: #f59a00;
+}
+
+* {
+  accent-color: #f59a00;
+}
+
+button,
+a,
+.nav-link,
+.blue-btn,
+.direction-btn,
+.small-btn,
+.plain-link-btn {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:hover,
+button:focus,
+button:active,
+a:hover,
+a:focus,
+a:active {
+  outline: none !important;
+}
+
+/* 背景图 100% 不加白色遮罩 */
+body {
+  background-image: url("assets/background.jpg") !important;
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+}
+
+/* 容器微微透出背景 */
+.control-band,
+.side-panel,
+.main-panel,
+.daily-report-card,
+.preview-card,
+.calendar-popover,
+.upload-card,
+.report-body,
+.current-date-box {
+  background-color: rgba(255, 255, 255, 0.88) !important;
+}
+
+/* 深色标题区仍保持可读 */
+.report-kicker,
+.preview-card-title,
+.upload-card h3,
+.topbar {
+  background-color: rgba(74, 70, 50, 0.96) !important;
+  color: #f59a00 !important;
+}
+
+/* 选中/点击状态统一为橄榄棕 + 橙色 */
+.is-selected,
+button:focus,
+a:focus {
+  background-color: #4a4632 !important;
+  color: #f59a00 !important;
+  border-color: #111 !important;
+  text-decoration-color: #f59a00 !important;
+  box-shadow: inset 0 0 0 3px #fff, 0 0 0 4px #111 !important;
+}
+
+/* 当前 active 导航和方向按钮 */
+.nav-link.active,
+.direction-btn.active {
+  background-color: #f59a00 !important;
+  color: #4a4632 !important;
+  text-decoration-color: #4a4632 !important;
+}
