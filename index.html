@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GSUA 前线图档案</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">跳转到主要内容</a>
+
+  <header class="site-header">
+    <div class="brand-row">
+      <div class="brand-mark" aria-hidden="true">GS</div>
+      <div>
+        <h1>GSUA 前线图档案</h1>
+        <p>每日方向图 · 文字报告 · 地名跳转</p>
+      </div>
+    </div>
+
+    <nav class="top-nav" aria-label="主导航">
+      <button class="nav-tab active" data-view="dashboard">综合展示</button>
+      <button class="nav-tab" data-view="direction">按方向查看</button>
+      <button class="nav-tab" data-view="date">按日期查看</button>
+      <button class="nav-tab" data-view="admin">后台上传</button>
+    </nav>
+  </header>
+
+  <main id="main" class="page-shell">
+    <section class="hero-panel">
+      <div>
+        <h2>前线变化对比系统</h2>
+        <p>选择方向或日期，查看每日前线图与对应文字报告。报告中的地名会自动识别并变成可点击链接。</p>
+      </div>
+      <div class="hero-actions">
+        <button class="primary-btn" id="quickAdminBtn">上传今日图文</button>
+        <button class="secondary-btn" id="loadDemoBtn">载入示例数据</button>
+      </div>
+    </section>
+
+    <section class="toolbar" aria-label="筛选器">
+      <label>
+        方向
+        <select id="directionFilter"></select>
+      </label>
+      <label>
+        日期
+        <select id="dateFilter"></select>
+      </label>
+      <button class="primary-btn small" id="applyFilterBtn">查看</button>
+      <button class="secondary-btn small" id="clearFilterBtn">清除筛选</button>
+    </section>
+
+    <section id="dashboardView" class="view active-view">
+      <div class="section-title-row">
+        <h2>综合展示</h2>
+        <span id="summaryCount" class="status-badge">0 条记录</span>
+      </div>
+      <div id="latestGrid" class="card-grid"></div>
+    </section>
+
+    <section id="directionView" class="view">
+      <div class="section-title-row">
+        <h2 id="directionTitle">按方向查看</h2>
+        <div class="compare-controls">
+          <button class="secondary-btn small" id="prevImageBtn">上一张</button>
+          <button class="secondary-btn small" id="nextImageBtn">下一张</button>
+        </div>
+      </div>
+      <article class="viewer-panel">
+        <div class="image-frame">
+          <img id="mainImage" alt="前线图预览" />
+          <div id="emptyViewer" class="empty-state">请选择方向或上传图片</div>
+        </div>
+        <aside class="report-panel">
+          <h3 id="viewerMeta">暂无记录</h3>
+          <div id="viewerReport" class="report-text"></div>
+        </aside>
+      </article>
+      <div id="timelineStrip" class="timeline-strip"></div>
+    </section>
+
+    <section id="dateView" class="view">
+      <div class="section-title-row">
+        <h2 id="dateTitle">按日期查看</h2>
+      </div>
+      <div id="dateGrid" class="card-grid"></div>
+    </section>
+
+    <section id="adminView" class="view">
+      <div class="section-title-row">
+        <h2>后台上传</h2>
+        <span class="status-badge">本地演示版</span>
+      </div>
+
+      <div class="admin-layout">
+        <form id="uploadForm" class="admin-panel">
+          <h3>上传每日前线图</h3>
+
+          <label>
+            前线方向
+            <select id="adminDirection" required></select>
+          </label>
+
+          <label>
+            日期
+            <input id="adminDate" type="date" required />
+          </label>
+
+          <label>
+            图片上传 / 复制粘贴图片
+            <input id="imageInput" type="file" accept="image/*" />
+          </label>
+
+          <div id="pasteBox" tabindex="0" class="paste-box">
+            点击这里后 Ctrl+V 粘贴图片，或使用上方文件选择。
+          </div>
+
+          <label>
+            当日文字报告
+            <textarea id="reportInput" rows="9" placeholder="输入当天报告。系统会自动识别方向名称和常见地名，并生成跳转链接。"></textarea>
+          </label>
+
+          <div class="button-row">
+            <button class="primary-btn" type="submit">保存记录</button>
+            <button class="secondary-btn" type="button" id="exportBtn">导出 JSON</button>
+            <button class="danger-btn" type="button" id="wipeBtn">清空本地数据</button>
+          </div>
+        </form>
+
+        <aside class="admin-panel">
+          <h3>方向管理</h3>
+          <div class="inline-form">
+            <input id="newDirectionInput" type="text" placeholder="新增方向名称" />
+            <button class="primary-btn small" id="addDirectionBtn">新增</button>
+          </div>
+          <ul id="directionManager" class="direction-manager"></ul>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="jsonDialog" class="json-dialog">
+    <h2>导出数据</h2>
+    <p>如果以后要做成真正公开更新的网站，可以把这些 JSON 保存为仓库里的数据文件。</p>
+    <textarea id="jsonOutput" rows="12"></textarea>
+    <button class="primary-btn" id="closeDialogBtn">关闭</button>
+  </dialog>
+
+  <script src="script.js"></script>
+</body>
+</html>
