@@ -1152,7 +1152,7 @@ a:active {
   outline: none !important;
 }
 
-/* 背景图 100% 不加白色遮罩 */
+/* 背景图 100% 透明 */
 body {
   background-image: url("assets/background.jpg") !important;
   background-size: cover;
@@ -1160,7 +1160,7 @@ body {
   background-attachment: fixed;
 }
 
-/* 容器微微透出背景 */
+/* 容器透出背景 */
 .control-band,
 .side-panel,
 .main-panel,
@@ -1173,11 +1173,29 @@ body {
   background-color: rgba(255, 255, 255, 0.88) !important;
 }
 
-/* 深色标题区仍保持可读 */
+/* 深色标题区可读 */
 .report-kicker,
 .preview-card-title,
 .upload-card h3,
 .topbar {
   background-color: rgba(74, 70, 50, 0.96) !important;
   color: #f59a00 !important;
+}
+
+/* 按钮互动停顿感 */
+button,
+a,
+.nav-link,
+.blue-btn,
+.direction-btn,
+.small-btn,
+.plain-link-btn,
+.preview-card button,
+.calendar-day {
+    transition:
+        background-color 0s linear 0.06s,
+        color 0s linear 0.06s,
+        border-color 0s linear 0.06s,
+        box-shadow 0s linear 0.06s,
+        text-decoration-color 0s linear 0.06s !important;
 }
