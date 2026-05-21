@@ -780,6 +780,25 @@ body {
   border: 4px solid #111;
   border-radius: 0;
   box-shadow: 0 5px 0 #c8c8c8;
+  animation: calendarPop 140ms steps(2, end);
+  transform-origin: top left;
+}
+
+@keyframes calendarPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(-6px);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.03) translateY(1px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .calendar-weekdays,
