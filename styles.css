@@ -1370,8 +1370,6 @@ body {
   padding-right: 34px;
 }
 
-.toolbar-select:hover,
-.toolbar-select:focus,
 .toolbar-select.is-selected {
   outline: none;
   background-color: var(--blue-900);
