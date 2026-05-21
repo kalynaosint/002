@@ -581,11 +581,17 @@ function renderLossTab() {
   const title = document.getElementById("lossChartTitle");
   const backBtn = document.getElementById("lossBackBtn");
 
-  if (title) title.textContent = isOverview ? "俄军损失 · 总览" : `俄军损失 · ${selectedLossCategory}`;
+  if (title) {
+    title.textContent = isOverview
+      ? "俄军损失 · 总览"
+      : `俄军损失 · ${selectedLossCategory}`;
+  }
+
   backBtn?.classList.toggle("hidden", isOverview);
 
   if (isOverview) {
     const container = document.querySelector("#lossChart")?.parentElement;
+
     if (container && !document.getElementById("personnelChart")) {
       container.classList.add("split-loss-overview");
       container.innerHTML = `
@@ -614,58 +620,104 @@ function renderLossTab() {
           responsive: true,
           maintainAspectRatio: false,
           plugins: {
-            title: { display: true, text: "装备损失占比总览（不含人员）" },
-            legend: { display: true, position: "right" }
+            title: {
+              display: true,
+              text: "装备损失占比总览（不含人员）"
+            },
+            legend: {
+              display: true,
+              position: "right"
+            }
           }
         }
       }
     );
 
-    if (window.personnelChartInstance) window.personnelChartInstance.destroy();
-    window.personnelChartInstance = new Chart(document.getElementById("personnelChart"), {
-      type: "line",
-      data: {
-        labels,
-        datasets: [{
-          label: "人员损失",
-          data: buildPersonnelLineData(labels),
-          borderColor: "#111",
-          backgroundColor: "#111",
-          borderWidth: 3,
-          pointRadius: 2,
-          tension: 0,
-          fill: false
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        interaction: { mode: "index", intersect: false },
-        plugins: {
-          title: { display: true, text: "人员损失趋势" },
-          legend: { display: true }
+    if (window.personnelChartInstance) {
+      window.personnelChartInstance.destroy();
+    }
+
+    window.personnelChartInstance = new Chart(
+      document.getElementById("personnelChart"),
+      {
+        type: "line",
+        data: {
+          labels,
+          datasets: [{
+            label: "人员损失",
+            data: buildPersonnelLineData(labels),
+            borderColor: "#111",
+            backgroundColor: "#111",
+            borderWidth: 3,
+            pointRadius: 2,
+            tension: 0,
+            fill: false
+          }]
         },
-        scales: {
-          y: { beginAtZero: true, ticks: { precision: 0 } }
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: "index",
+            intersect: false
+          },
+          plugins: {
+            title: {
+              display: true,
+              text: "人员损失趋势"
+            },
+            legend: {
+              display: true
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                precision: 0
+              }
+            }
+          }
         }
       }
-    });
+    );
 
     return;
   }
+  
+  const container = document.querySelector("#lossChart")?.parentElement;
 
-  const values = labels.map(date => numberValue(state.days[date]?.losses?.[selectedLossCategory]));
+  if (container?.classList.contains("split-loss-overview")) {
+    container.classList.remove("split-loss-overview");
+    container.innerHTML = `<canvas id="lossChart"></canvas>`;
+
+    if (window.personnelChartInstance) {
+      window.personnelChartInstance.destroy();
+      window.personnelChartInstance = null;
+    }
+
+    lossChart = null;
+  }
+
+  const values = labels.map(date =>
+    numberValue(state.days[date]?.losses?.[selectedLossCategory])
+  );
+
   const datasets = [
-    chartDataset("每日损失", values, "bar", { backgroundColor: "#4a4632" })
+    chartDataset("每日损失", values, "bar", {
+      backgroundColor: "#4a4632"
+    })
   ];
 
   if (lossMA) {
-    datasets.push(chartDataset(`${lossMA}日均线`, movingAverage(values, lossMA), "line", {
-      borderColor: "#f59a00",
-      backgroundColor: "#f59a00",
-      borderWidth: 3,
-      pointRadius: 0
-    }));
+    datasets.push(
+      chartDataset(`${lossMA}日均线`, movingAverage(values, lossMA), "line", {
+        borderColor: "#f59a00",
+        backgroundColor: "#f59a00",
+        borderWidth: 3,
+        pointRadius: 0
+      })
+    );
   }
 
   lossChart = makeChart(
@@ -673,17 +725,33 @@ function renderLossTab() {
     lossChart,
     {
       type: "bar",
-      data: { labels, datasets },
+      data: {
+        labels,
+        datasets
+      },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        interaction: { mode: "index", intersect: false },
+        interaction: {
+          mode: "index",
+          intersect: false
+        },
         plugins: {
-          title: { display: true, text: `每日俄军损失 · ${selectedLossCategory}` },
-          legend: { display: true }
+          title: {
+            display: true,
+            text: `每日俄军损失 · ${selectedLossCategory}`
+          },
+          legend: {
+            display: true
+          }
         },
         scales: {
-          y: { beginAtZero: true, ticks: { precision: 0 } }
+          y: {
+            beginAtZero: true,
+            ticks: {
+              precision: 0
+            }
+          }
         }
       }
     }
