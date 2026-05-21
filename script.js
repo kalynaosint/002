@@ -863,6 +863,43 @@ async function loadDataFromGithub() {
   });
 }
 
+async function cropGsuaMap(file) {
+  return new Promise(resolve => {
+    const img = new Image();
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      const cropX = img.width * 0.35;
+
+      const cropWidth = img.width - cropX;
+      const cropHeight = img.height;
+
+      canvas.width = cropWidth;
+      canvas.height = cropHeight;
+
+      ctx.drawImage(
+        img,
+        cropX,
+        0,
+        cropWidth,
+        cropHeight,
+        0,
+        0,
+        cropWidth,
+        cropHeight
+      );
+
+      canvas.toBlob(blob => {
+        resolve(blob);
+      }, "image/webp", 0.9);
+    };
+
+    img.src = URL.createObjectURL(file);
+  });
+}
+
 async function uploadImageToGithub(file, date, direction) {
   const form = new FormData();
 
@@ -980,7 +1017,15 @@ function renderUploadGrid() {
 
       showAdminStatus(`正在上传图片：${date} · ${direction} ...`);
 
-      uploadImageToGithub(file, date, direction)
+      cropGsuaMap(file).then(cropped => {
+        uploadImageToGithub(
+          new File([cropped], "map.webp", {
+            type: "image/webp"
+          }),
+          date,
+          direction
+        );
+      });
         .then(result => {
           state.days[date].images[direction] = result.path;
           saveLocalState();
@@ -1016,9 +1061,16 @@ document.addEventListener("paste", e => {
     return;
   }
 
-  showAdminStatus(`正在上传图片：${date} · ${direction} ...`);
+  showAdminStatus(`正在裁剪并上传图片：${date} · ${direction} ...`);
 
-  uploadImageToGithub(file, date, direction)
+  cropGsuaMap(file)
+    .then(cropped => {
+      const croppedFile = new File([cropped], "map.webp", {
+        type: "image/webp"
+      });
+
+      return uploadImageToGithub(croppedFile, date, direction);
+    })
     .then(result => {
       ensureDay(date);
       state.days[date].images[direction] = result.path;
@@ -1027,7 +1079,7 @@ document.addEventListener("paste", e => {
       return saveDataToGithub();
     })
     .then(() => {
-      showAdminStatus(`已上传并同步：${date} · ${direction}`);
+      showAdminStatus(`已裁剪、上传并同步：${date} · ${direction}`);
     })
     .catch(err => {
       showAdminStatus(`上传失败：${date} · ${direction}`);
