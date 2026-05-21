@@ -1017,15 +1017,16 @@ function renderUploadGrid() {
 
       showAdminStatus(`正在上传图片：${date} · ${direction} ...`);
 
-      cropGsuaMap(file).then(cropped => {
-        uploadImageToGithub(
-          new File([cropped], "map.webp", {
-            type: "image/webp"
-          }),
-          date,
-          direction
-        );
-      });
+      cropGsuaMap(file)
+        .then(cropped => {
+          return uploadImageToGithub(
+            new File([cropped], "map.webp", {
+              type: "image/webp"
+            }),
+            date,
+            direction
+          );
+        })
         .then(result => {
           state.days[date].images[direction] = result.path;
           saveLocalState();
