@@ -654,16 +654,6 @@ function renderLossTab() {
     return;
   }
 
-  const container = document.querySelector("#lossChart")?.parentElement;
-  if (container?.classList.contains("split-loss-overview")) {
-    container.classList.remove("split-loss-overview");
-    container.innerHTML = `<canvas id="lossChart"></canvas>`;
-    if (window.personnelChartInstance) {
-      window.personnelChartInstance.destroy();
-      window.personnelChartInstance = null;
-    }
-  }
-
   const values = labels.map(date => numberValue(state.days[date]?.losses?.[selectedLossCategory]));
   const datasets = [
     chartDataset("每日损失", values, "bar", { backgroundColor: "#4a4632" })
