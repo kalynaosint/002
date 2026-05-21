@@ -923,6 +923,8 @@ function renderAdminDirections() {
   });
 }
 
+let activePasteTarget = null;
+
 function renderUploadGrid() {
   const grid = document.getElementById("uploadGrid");
   const dateInput = document.getElementById("adminDate");
@@ -953,7 +955,10 @@ function renderUploadGrid() {
 
     const zone = card.querySelector(".paste-zone");
     const fileInput = card.querySelector("input");
-    zone?.addEventListener("click", () => fileInput?.click());
+    zone?.addEventListener("click", () => {
+      activePasteTarget = { date, direction };
+      zone.focus();
+    });
     zone?.addEventListener("paste", e => {
       const item = [...e.clipboardData.items].find(i => i.type.startsWith("image/"));
       if (!item) return;
@@ -988,6 +993,28 @@ function renderUploadGrid() {
     grid.appendChild(card);
   });
 }
+
+document.addEventListener("paste", e => {
+  if (!isAdmin || !activePasteTarget) return;
+
+  const item = [...e.clipboardData.items].find(i => i.type.startsWith("image/"));
+  if (!item) return;
+
+  e.preventDefault();
+
+  const file = item.getAsFile();
+  const { date, direction } = activePasteTarget;
+
+  uploadImageToGithub(file, date, direction)
+    .then(result => {
+      ensureDay(date);
+      state.days[date].images[direction] = result.path;
+      saveLocalState();
+      renderUploadGrid();
+      return saveDataToGithub();
+    })
+    .catch(err => alert("上传失败：" + err.message));
+});
 
 function renderNumberInputs(containerId, entries, valueGetter, onInput) {
   const box = document.getElementById(containerId);
