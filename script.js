@@ -685,17 +685,17 @@ function renderLossTab() {
     return;
   }
   
-  const container = document.querySelector("#lossChart")?.parentElement;
+  const container = document.querySelector("#lossChart")?.closest(".split-loss-overview");
 
-  if (container?.classList.contains("split-loss-overview")) {
+  if (container) {
     container.classList.remove("split-loss-overview");
     container.innerHTML = `<canvas id="lossChart"></canvas>`;
-
+  
     if (window.personnelChartInstance) {
       window.personnelChartInstance.destroy();
       window.personnelChartInstance = null;
     }
-
+  
     lossChart = null;
   }
 
