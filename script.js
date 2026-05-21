@@ -959,7 +959,7 @@ function renderUploadGrid() {
       activePasteTarget = { date, direction };
       zone.focus();
     });
-    });
+    
     fileInput?.addEventListener("change", e => {
       const file = e.target.files[0];
       if (!file) return;
