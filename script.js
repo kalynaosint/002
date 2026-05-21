@@ -957,6 +957,20 @@ function renderUploadGrid() {
     const fileInput = card.querySelector("input");
     zone?.addEventListener("click", () => {
       activePasteTarget = { date, direction };
+    
+      document.querySelectorAll(".paste-zone").forEach(el => {
+        el.classList.remove("paste-active");
+      });
+    
+      zone.classList.add("paste-active");
+    
+      const status = document.getElementById("pasteTargetStatus");
+    
+      if (status) {
+        status.textContent =
+          `当前粘贴目标：${direction} · ${date}`;
+      }
+    
       zone.focus();
     });
     
