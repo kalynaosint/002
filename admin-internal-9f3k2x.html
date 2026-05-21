@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GSUA 前线图档案 · 内部后台</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="admin">
+  <header class="topbar">
+    <div class="brand-row">
+      <a class="brand-link" href="index.html">GSUA Frontline Archive</a>
+      <nav class="topnav" aria-label="后台导航">
+        <a class="nav-link active" href="#">内部后台</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="admin-layout">
+      <aside class="side-panel">
+        <h1>内部后台</h1>
+        <p class="side-note">本后台用于编辑并同步数据。点击“同步给所有人”后会通过 Worker 写入 GitHub 的 <strong>data/data.json</strong>，所有用户前端即可同步。</p>
+
+        <label class="form-label" for="adminDate">数据日期</label>
+        <input class="text-input" id="adminDate" type="date" />
+
+        <div class="button-row">
+          <button class="blue-btn" id="loadAdminDateBtn" type="button">加载日期</button>
+          <button class="blue-btn outline" id="createDateBtn" type="button">新建/保存日期</button>
+        </div>
+
+        <hr class="divider" />
+
+        <h2>方向管理</h2>
+        <div class="button-row">
+          <input class="text-input compact" id="newDirectionInput" type="text" placeholder="新增方向名称" />
+          <button class="blue-btn" id="addDirectionBtn" type="button">新增</button>
+        </div>
+        <div class="direction-list admin" id="adminDirectionList"></div>
+
+        <hr class="divider" />
+
+        <button class="blue-btn full" id="saveAllBtn" type="button">同步给所有人</button>
+        <button class="blue-btn full" id="exportJsonBtn" type="button">导出 data.json</button>
+        <button class="blue-btn outline full" id="importJsonBtn" type="button">导入 JSON</button>
+        <textarea class="json-box" id="jsonBox" placeholder="导出的 JSON 或需要导入的 JSON"></textarea>
+      </aside>
+
+      <section class="main-panel">
+        <div class="panel-title-row">
+          <div>
+            <h1>每日数据编辑</h1>
+            <p id="adminStatus">请选择或新建一个日期。</p>
+          </div>
+        </div>
+
+        <section class="admin-section">
+          <h2>前线图上传</h2>
+          <p class="hint-line">点击某个方向图片框后按 Ctrl+V 粘贴图片，或使用文件选择。图片会上传到 GitHub 的 images/ 目录，data.json 只保存图片路径。</p>
+          <section class="upload-grid" id="uploadGrid"></section>
+        </section>
+
+        <section class="admin-section report-panel">
+          <h2>当日文字报告</h2>
+          <textarea class="report-editor" id="reportEditor" placeholder="粘贴当天文字报告。系统会自动把方向名称变成可点击跳转链接。"></textarea>
+        </section>
+
+        <section class="admin-section report-panel">
+          <h2>交战数据：每日击退进攻次数</h2>
+          <div class="data-input-grid" id="combatInputs"></div>
+        </section>
+
+        <section class="admin-section report-panel">
+          <h2>俄军损失</h2>
+          <div class="data-input-grid" id="lossInputs"></div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
