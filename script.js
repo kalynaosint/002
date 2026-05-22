@@ -894,7 +894,7 @@ async function cropGsuaMap(file) {
 
       canvas.toBlob(blob => {
         resolve(blob);
-      }, "image/webp", 0.9);
+      }, "image/webp", 1);
     };
 
     img.src = URL.createObjectURL(file);
