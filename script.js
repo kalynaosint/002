@@ -360,13 +360,6 @@ function renderDetailChangeOverlay() {
   overlay.innerHTML = "";
   overlay.classList.toggle("hidden", !detailChangesVisible || !changes.length);
 
-  if (toggleBtn) {
-    toggleBtn.disabled = !changes.length;
-    toggleBtn.textContent = changes.length
-      ? (detailChangesVisible ? `隐藏变化区域（${changes.length}）` : `查看变化区域（${changes.length}）`)
-      : "暂无变化标注";
-  }
-
   if (!detailChangesVisible || !changes.length) return;
 
   const display = imageDisplayBox(img, frame);
