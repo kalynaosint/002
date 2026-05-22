@@ -16,6 +16,7 @@ const LOCAL_STORAGE_KEY = "gsua_frontline_archive_local_admin";
 const DATA_URL = "data/data.json";
 const API_BASE = "https://gsua-backend.kalynaosint.workers.dev";
 let ADMIN_KEY = localStorage.getItem("gsua_admin_key") || "";
+let showChanges = false;
 
 const DIRECTION_COLORS = [
   "#ff00d4", "#ff0000", "#ff8500", "#ffd400", "#1167d8", "#00c987",
@@ -279,13 +280,13 @@ function setSelectedDate(date) {
   if (!date || !state.days[date]) return;
   selectedDate = date;
   calendarMonth = date.slice(0, 7);
-  detailChangesVisible = false;
+  showChanges = false;
   renderViewer();
 }
 
 function setSelectedDirection(direction) {
   selectedDirection = direction;
-  detailChangesVisible = false;
+  showChanges = false;
   renderViewer();
 }
 
@@ -479,6 +480,18 @@ function renderViewer() {
   currentDateText.textContent = selectedDate;
   if (detailCurrentDateText) detailCurrentDateText.textContent = selectedDate;
 
+  const toggleChangesBtn = document.getElementById("toggleChangesBtn");
+  const detailToggleChangesBtn = document.getElementById("detailToggleChangesBtn");
+  
+  toggleChangesBtn?.classList.toggle("hidden", !selectedDirection);
+  detailToggleChangesBtn?.classList.toggle("hidden", !selectedDirection);
+  
+  [toggleChangesBtn, detailToggleChangesBtn].forEach(btn => {
+    if (!btn) return;
+    btn.textContent = showChanges ? "隐藏变化" : "查看变化";
+    btn.classList.toggle("is-selected", showChanges);
+  });
+
   if (selectedDirection) {
     frontlineTab?.classList.add("is-detail-mode");
     moveCalendarPopover(true);
@@ -539,6 +552,15 @@ function bindFrontlineControls() {
   });
   window.addEventListener("resize", renderDetailChangeOverlay);
 }
+
+function toggleChangesOverlay() {
+  showChanges = !showChanges;
+  renderDetail();
+  renderViewer();
+}
+
+document.getElementById("toggleChangesBtn")?.addEventListener("click", toggleChangesOverlay);
+document.getElementById("detailToggleChangesBtn")?.addEventListener("click", toggleChangesOverlay);
 
 function shiftCalendarMonth(offset) {
   const [year, month] = calendarMonth.split("-").map(Number);
