@@ -872,9 +872,10 @@ async function cropGsuaMap(file) {
       const ctx = canvas.getContext("2d");
 
       const cropX = img.width * 0.35;
+      const cropY = img.height * 0.125;
 
       const cropWidth = img.width - cropX;
-      const cropHeight = img.height;
+      const cropHeight = img.height - cropY;
 
       canvas.width = cropWidth;
       canvas.height = cropHeight;
@@ -882,7 +883,7 @@ async function cropGsuaMap(file) {
       ctx.drawImage(
         img,
         cropX,
-        0,
+        cropY,
         cropWidth,
         cropHeight,
         0,
