@@ -466,7 +466,6 @@ function renderViewer() {
   const detail = document.getElementById("detailView");
   const reportBody = document.getElementById("reportBody");
   const backBtn = document.getElementById("backToOverviewBtn");
-  const toggleChangesBtn = document.getElementById("toggleChangesBtn");
   const detailCurrentDateText = document.getElementById("detailCurrentDateText");
   const frontlineTab = document.getElementById("tab-frontline");
 
@@ -539,21 +538,17 @@ function bindFrontlineControls() {
     detailChangesVisible = false;
     renderViewer();
   });
-  document.getElementById("toggleChangesBtn")?.addEventListener("click", () => {
-    detailChangesVisible = !detailChangesVisible;
-    renderDetailChangeOverlay();
-  });
+  document.getElementById("toggleChangesBtn")?.addEventListener("click", toggleChangesOverlay);
+  document.getElementById("detailToggleChangesBtn")?.addEventListener("click", toggleChangesOverlay);
   window.addEventListener("resize", renderDetailChangeOverlay);
 }
 
 function toggleChangesOverlay() {
-  showChanges = !showChanges;
-  renderDetail();
+  detailChangesVisible = !detailChangesVisible;
+  showChanges = detailChangesVisible;
+  renderDetailChangeOverlay();
   renderViewer();
 }
-
-document.getElementById("toggleChangesBtn")?.addEventListener("click", toggleChangesOverlay);
-document.getElementById("detailToggleChangesBtn")?.addEventListener("click", toggleChangesOverlay);
 
 function shiftCalendarMonth(offset) {
   const [year, month] = calendarMonth.split("-").map(Number);
