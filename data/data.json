@@ -147,7 +147,10 @@
           "src": "images/2026-05-20/库班.webp",
           "changes": []
         },
-        "赫尔松": "images/2026-05-20/赫尔松.webp",
+        "赫尔松": {
+          "src": "images/2026-05-20/赫尔松.webp",
+          "changes": []
+        },
         "未知方向": ""
       },
       "combat": {
