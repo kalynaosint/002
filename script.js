@@ -1541,7 +1541,7 @@ function renderNumberInputs(containerId, entries, valueGetter, onInput) {
     const row = document.createElement("div");
     row.className = "data-input-row";
     row.innerHTML = `
-      <label>${escapeHtml(name)}</label>
+      <label>${escapeHtml(name === UNKNOWN_DIRECTION ? "进攻次数" : name)}</label>
       <input class="text-input" type="number" min="0" step="1" value="${valueGetter(name)}">
     `;
     row.querySelector("input").addEventListener("input", e => onInput(name, e.target.value));
