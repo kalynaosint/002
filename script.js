@@ -736,7 +736,10 @@ function renderAttackCountChart(labels, isOverview) {
         interaction: { mode: "index", intersect: false },
         plugins: {
           title: { display: true, text: "每日进攻次数" },
-          legend: { display: true }
+          legend: {
+            display: true,
+            position: "right"
+          }
         },
         scales: {
           y: { beginAtZero: true, ticks: { precision: 0 } }
