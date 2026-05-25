@@ -733,6 +733,11 @@ function renderAttackCountChart(labels, isOverview) {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        layout: {
+          padding: {
+            right: 180
+          }
+        },
         interaction: { mode: "index", intersect: false },
         plugins: {
           title: { display: true, text: "每日进攻次数" },
