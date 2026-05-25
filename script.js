@@ -735,7 +735,7 @@ function renderAttackCountChart(labels, isOverview) {
         maintainAspectRatio: false,
         layout: {
           padding: {
-            right: 50
+            right: 10
           }
         },
         interaction: { mode: "index", intersect: false },
